@@ -180,6 +180,29 @@
       });
     });
 
+    function resizeOrbitCanvas(){
+      const dpr = window.devicePixelRatio || 1;
+    
+      // 캔버스 실제 픽셀 수
+      orbitCanvas.width = window.innerWidth * dpr;
+      orbitCanvas.height = 200 * dpr;
+    
+      // CSS 크기
+      orbitCanvas.style.width = window.innerWidth + 'px';
+      orbitCanvas.style.height = '200px';
+    
+      // 컨텍스트 스케일 조정
+      oCtx.setTransform(1, 0, 0, 1, 0, 0); // 초기화
+      oCtx.scale(dpr, dpr);
+    
+      // 중심점 업데이트 (CSS 기준 좌표)
+      centerX = window.innerWidth / 2;
+      centerY = 100; 
+    }
+    
+    // 초기화
+    resizeOrbitCanvas();
+    
     // 반응형
     window.addEventListener('resize', ()=>{
       orbitCanvas.width = window.innerWidth;
