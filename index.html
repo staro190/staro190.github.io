@@ -128,10 +128,15 @@
       });
     });
 
-    // 반응형
+    let centerX = orbitCanvas.width / 2;
+    let centerY = orbitCanvas.height / 2;
+    
     window.addEventListener('resize', ()=>{
       orbitCanvas.width = window.innerWidth;
-      orbitCanvas.height = 200;
+      orbitCanvas.height = 200;  // 캔버스 높이 유지
+    
+      centerX = orbitCanvas.width / 2;
+      centerY = orbitCanvas.height / 2;
     });
   </script>
 </body>
