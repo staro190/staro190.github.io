@@ -25,55 +25,55 @@
     <canvas id="orbitCanvas" style="position: fixed; bottom:0; left:0; width:100%; height:200px; z-index:5;"></canvas>
     
     <script>
-    const orbitCanvas = document.getElementById('orbitCanvas');
-    const oCtx = orbitCanvas.getContext('2d');
-    orbitCanvas.width = window.innerWidth;
-    orbitCanvas.height = 200;
-    
-    const centerX = orbitCanvas.width / 2;
-    const centerY = 100; // 캔버스 높이 절반
-    
-    // 궤도 설정
-    const orbits = [
-      { radius: 40, speed: 0.02, angle: 0 },
-      { radius: 70, speed: 0.015, angle: Math.PI/2 },
-      { radius: 100, speed: 0.01, angle: Math.PI }
-    ];
-    
-    const colors = ['#00d4ff', '#ff6fff', '#ffd700'];
-    
-    function drawOrbit() {
-      oCtx.clearRect(0,0,orbitCanvas.width, orbitCanvas.height);
-    
-      orbits.forEach((o,i)=>{
-        // 궤도 원
-        oCtx.beginPath();
-        oCtx.strokeStyle = 'rgba(255,255,255,0.2)';
-        oCtx.arc(centerX, centerY, o.radius, 0, Math.PI*2);
-        oCtx.stroke();
-    
-        // 이동 점
-        const x = centerX + o.radius * Math.cos(o.angle);
-        const y = centerY + o.radius * Math.sin(o.angle);
-    
-        oCtx.beginPath();
-        oCtx.arc(x, y, 6, 0, Math.PI*2);
-        oCtx.fillStyle = colors[i%colors.length];
-        oCtx.fill();
-    
-        // 각도 업데이트
-        o.angle += o.speed;
-      });
-    
-      requestAnimationFrame(drawOrbit);
-    }
-    drawOrbit();
-    
-    // 반응형
-    window.addEventListener('resize', ()=>{
+      const orbitCanvas = document.getElementById('orbitCanvas');
+      const oCtx = orbitCanvas.getContext('2d');
       orbitCanvas.width = window.innerWidth;
       orbitCanvas.height = 200;
-    });
+      
+      const centerX = orbitCanvas.width / 2;
+      const centerY = 100; // 캔버스 높이 절반
+      
+      // 궤도 설정
+      const orbits = [
+        { radius: 40, speed: 0.02, angle: 0 },
+        { radius: 70, speed: 0.015, angle: Math.PI/2 },
+        { radius: 100, speed: 0.01, angle: Math.PI }
+      ];
+      
+      const colors = ['#00d4ff', '#ff6fff', '#ffd700'];
+      
+      function drawOrbit() {
+        oCtx.clearRect(0,0,orbitCanvas.width, orbitCanvas.height);
+      
+        orbits.forEach((o,i)=>{
+          // 궤도 원
+          oCtx.beginPath();
+          oCtx.strokeStyle = 'rgba(255,255,255,0.2)';
+          oCtx.arc(centerX, centerY, o.radius, 0, Math.PI*2);
+          oCtx.stroke();
+      
+          // 이동 점
+          const x = centerX + o.radius * Math.cos(o.angle);
+          const y = centerY + o.radius * Math.sin(o.angle);
+      
+          oCtx.beginPath();
+          oCtx.arc(x, y, 6, 0, Math.PI*2);
+          oCtx.fillStyle = colors[i%colors.length];
+          oCtx.fill();
+      
+          // 각도 업데이트
+          o.angle += o.speed;
+        });
+      
+        requestAnimationFrame(drawOrbit);
+      }
+      drawOrbit();
+      
+      // 반응형
+      window.addEventListener('resize', ()=>{
+        orbitCanvas.width = window.innerWidth;
+        orbitCanvas.height = 200;
+      });
     </script>
 
   </script>
