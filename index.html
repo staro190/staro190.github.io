@@ -102,9 +102,12 @@
 
     orbits.forEach(o=>{
       const img = new Image();
-      img.src = o.img;
+      img.src = o.icon;      // 기존 o.img → o.icon
       o.imageObj = img;
+      o.isLoaded = false;    // 로드 완료 여부
+      img.onload = () => { o.isLoaded = true; } // 이미지 로드 완료 시 true
     });
+
     
     //const colors = ['#4dd0e1', '#d291ff', '#ffdf70']; // 낮은 채도
     const colors = [
