@@ -196,13 +196,15 @@
       const canvasWidth = 450;
       const canvasHeight = 450;      // 원하는 높이
       const canvasBottom = 100;      // 화면 하단에서 띄울 거리
-      const canvasLeft = 50%;      // 화면 하단에서 띄울 거리
     
       orbitCanvas.width = canvasWidth * dpr;
       orbitCanvas.height = canvasHeight * dpr;
       orbitCanvas.style.width = canvasWidth + 'px';
       orbitCanvas.style.height = canvasHeight + 'px';
       orbitCanvas.style.bottom = canvasBottom + 'px';
+      orbitCanvas.style.left = '50%';
+      orbitCanvas.style.transform = 'translateX(-50%)';
+
     
       // DPI 보정
       oCtx.setTransform(1, 0, 0, 1, 0, 0);
