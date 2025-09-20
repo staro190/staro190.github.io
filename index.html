@@ -35,7 +35,7 @@
   </div>
 
   <!-- 하단 궤도 캔버스 -->
-  <canvas id="orbitCanvas" style="position: fixed; bottom:10%; left:0; width:100%; height:200px; z-index:5;"></canvas>
+  <canvas id="orbitCanvas" style="position: fixed; bottom:10%; left:0; width:100%; height:300px; z-index:5;"></canvas>
 
   <!-- 배경 파티클 JS -->
   <script>
@@ -134,16 +134,16 @@
 
         // 점 그리기 (크기 크게)
         oCtx.beginPath();
-        oCtx.arc(x, y, 10, 0, Math.PI*2); // 점 크기 10
+        oCtx.arc(x, y, 20, 0, Math.PI*2); // 점 크기 10
         oCtx.fillStyle = colors[i % colors.length];
         oCtx.fill();
 
         // 아이콘 마우스 오버 확대 + 글로우
         const distance = Math.hypot(mouseX - x, mouseY - y);
-        let iconSize = 24; // 기본 아이콘 작게
+        let iconSize = 10; // 기본 아이콘 작게
         oCtx.shadowBlur = 0;
         if(distance < 32){
-          iconSize = 36; // 마우스 오버 시 확대
+          iconSize = 15; // 마우스 오버 시 확대
           oCtx.shadowColor = '#fff';
           oCtx.shadowBlur = 20;
         }
