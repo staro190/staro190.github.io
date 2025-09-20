@@ -132,11 +132,18 @@
         const x = centerX + o.radius * Math.cos(o.angle);
         const y = centerY + o.radius * Math.sin(o.angle);
 
+        oCtx.shadowColor = colors[i%colors.length]; // 각 점 색과 동일하게
+        oCtx.shadowBlur = 15;
+
         // 점 그리기 (크기 크게)
         oCtx.beginPath();
         oCtx.arc(x, y, 20, 0, Math.PI*2); // 점 크기 10
         oCtx.fillStyle = colors[i % colors.length];
         oCtx.fill();
+
+        // 글로우 해제
+        oCtx.shadowColor = 'transparent';
+        oCtx.shadowBlur = 0;
 
         // 아이콘 마우스 오버 확대 + 글로우
         const distance = Math.hypot(mouseX - x, mouseY - y);
