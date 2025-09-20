@@ -1,291 +1,160 @@
-<!doctype html>
-<html lang="ko">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Math & Science — Visual Playground</title>
-  <meta name="description" content="수학·과학을 테마로 한 기하학 디자인의 인터랙티브 랜딩 페이지 예제입니다." />
+  <meta charset="UTF-8">
+  <title>Math & Science Universe</title>
   <style>
-    /* 기본 레이아웃 */
-    :root{
-      --bg:#0f1724; /* deep navy */
-      --card:#0b1220;
-      --accent:#7dd3fc; /* cyan */
-      --accent2:#fbcfe8; /* pink */
-      --muted:#94a3b8;
-      --glass: rgba(255,255,255,0.03);
-      --glass-2: rgba(255,255,255,0.02);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans KR", "Helvetica Neue", Arial;
-    }
-    html,body{height:100%;margin:0;background:var(--bg);color:#e6eef8;}
-    .wrap{min-height:100%;display:flex;align-items:center;justify-content:center;padding:48px 24px;box-sizing:border-box}
-
-    /* 카드 */
-    .card{width:100%;max-width:1100px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:18px;padding:36px;box-shadow: 0 8px 30px rgba(2,6,23,0.6);position:relative;overflow:hidden;border:1px solid rgba(255,255,255,0.03)}
-
-    /* 헤더 */
-    header{display:flex;align-items:center;gap:20px}
-    .logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:700;color:#04253a;box-shadow:0 6px 18px rgba(125,211,252,0.12);}
-    .title{font-size:22px;font-weight:700;margin:0}
-    .subtitle{color:var(--muted);margin:0;font-size:13px}
-
-    /* 그리드 */
-    .main{display:grid;grid-template-columns:1fr 420px;gap:28px;margin-top:22px}
-
-    /* 설명 */
-    .lead{line-height:1.5;color:#dbeafe}
-    .cta{display:flex;gap:12px;margin-top:18px}
-    .btn{background:linear-gradient(90deg,var(--accent),#60a5fa);padding:10px 14px;border-radius:10px;color:#04253a;font-weight:700;border:none;cursor:pointer}
-    .btn.secondary{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--accent);}
-
-    /* 사이드 카드 */
-    .side{background:var(--card);border-radius:12px;padding:16px;min-height:240px;border:1px solid rgba(255,255,255,0.02)}
-    .controls{display:flex;flex-direction:column;gap:10px}
-    .control-row{display:flex;align-items:center;gap:8px}
-    .range{flex:1}
-    label{font-size:13px;color:var(--muted)}
-
-    /* 시각화 영역 */
-    #viz{height:360px;border-radius:12px;overflow:hidden;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));display:flex;align-items:center;justify-content:center}
-
-    /* 배경 격자 */
-    .bg-geometry{position:absolute;inset:0;pointer-events:none}
-
-    /* 아래 섹션 */
-    .features{display:flex;gap:14px;margin-top:22px}
-    .feature{flex:1;background:var(--glass);padding:14px;border-radius:10px;border:1px solid rgba(255,255,255,0.02)}
-
-    /* 반응형 */
-    @media (max-width:980px){
-      .main{grid-template-columns:1fr}
-      #viz{height:260px}
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: black;
+      color: white;
+      scroll-behavior: smooth;
     }
 
-    /* 작은 애니메이션 */
-    .pulse{animation:pulse 3s infinite}
-    @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.02)}100%{transform:scale(1)}}
+    /* 네비게이션 바 */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      background: rgba(0,0,0,0.6);
+      padding: 1rem;
+      z-index: 10;
+      backdrop-filter: blur(5px);
+    }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+    nav a:hover {
+      color: #00d4ff;
+    }
 
-    footer{margin-top:16px;color:var(--muted);font-size:13px}
+    /* 섹션 스타일 */
+    section {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+    }
+
+    #hero h1 {
+      font-size: 3rem;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #00d4ff; }
+      to { text-shadow: 0 0 30px #00d4ff; }
+    }
+
+    #about, #visuals, #contact {
+      background: rgba(0,0,0,0.7);
+      border-radius: 1rem;
+      padding: 2rem;
+      margin: 2rem;
+    }
+
+    /* 캔버스 배경 */
+    canvas#bg {
+      position: fixed;
+      top:0; left:0; width:100%; height:100%;
+      z-index: -1;
+    }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="card">
+  <!-- 배경 -->
+  <canvas id="bg"></canvas>
 
-      <!-- 배경 기하학 SVG (애니메이션 포함) -->
-      <svg class="bg-geometry" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-        <defs>
-          <linearGradient id="g1" x1="0" x2="1">
-            <stop offset="0%" stop-color="#0ea5e9" stop-opacity="0.06" />
-            <stop offset="100%" stop-color="#f472b6" stop-opacity="0.04" />
-          </linearGradient>
-        </defs>
-        <rect width="100%" height="100%" fill="transparent" />
-        <!-- 삼각형 패턴 레이어 -->
-        <g id="tris" opacity="0.18"></g>
-      </svg>
+  <!-- 네비게이션 -->
+  <nav>
+    <a href="#hero">Home</a>
+    <a href="#about">About</a>
+    <a href="#visuals">Visualizations</a>
+    <a href="#contact">Contact</a>
+  </nav>
 
-      <header>
-        <div class="logo">Σπ</div>
-        <div>
-          <h1 class="title">Math & Science Visual Playground</h1>
-          <p class="subtitle">기하학적 모티프 · 알고리즘 시각화 · 모션 그래픽</p>
-        </div>
-      </header>
+  <!-- Hero Section -->
+  <section id="hero">
+    <h1>Welcome to the Math & Science Universe</h1>
+  </section>
 
-      <div class="main">
-        <div>
-          <p class="lead">인터랙티브한 기하학적 배경과 알고리즘 기반의 모션 그래픽으로 과학·수학 개념을 아름답게 보여줍니다. 아래에서 파라미터를 조정하여 시각 효과와 동작을 실시간으로 바꿔보세요.</p>
-
-          <div id="viz" aria-live="polite">
-            <!-- 캔버스가 여기로 삽입됩니다. -->
-          </div>
-
-          <div class="features">
-            <div class="feature">
-              <strong>정적 요소</strong>
-              <p style="color:var(--muted);font-size:13px;margin:6px 0 0;">기본 기하학 패턴은 CSS & SVG로 만들어졌습니다. 해상도에 따라 부드럽게 스케일됩니다.</p>
-            </div>
-            <div class="feature">
-              <strong>동적 요소</strong>
-              <p style="color:var(--muted);font-size:13px;margin:6px 0 0;">JavaScript와 Canvas를 사용하여 물리 기반 파티클, 함수 플롯, 알고리즘 애니메이션을 렌더링합니다.</p>
-            </div>
-          </div>
-        </div>
-
-        <aside class="side">
-          <div class="controls">
-            <div class="control-row">
-              <label for="count">파티클 수</label>
-              <input id="count" class="range" type="range" min="10" max="200" value="80" />
-            </div>
-            <div class="control-row">
-              <label for="speed">속도</label>
-              <input id="speed" class="range" type="range" min="0" max="5" value="1.4" step="0.1" />
-            </div>
-            <div class="control-row">
-              <label for="mode">모드</label>
-              <select id="mode">
-                <option value="mesh">기하학 메쉬</option>
-                <option value="waves">사인파</option>
-                <option value="orbits">원 궤도</option>
-              </select>
-            </div>
-            <div style="display:flex;gap:8px;margin-top:6px">
-              <button id="restart" class="btn">재시작</button>
-              <button id="pause" class="btn secondary">일시정지</button>
-            </div>
-
-            <hr style="border:none;border-top:1px solid rgba(255,255,255,0.03);margin:10px 0">
-            <div style="font-size:13px;color:var(--muted)">테마: <strong>기하학 · 함수 · 알고리즘</strong></div>
-          </div>
-        </aside>
-      </div>
-
-      <footer>© 2025 Visual Playground — made with ♥ for math & science</footer>
+  <!-- About -->
+  <section id="about">
+    <div>
+      <h2>About</h2>
+      <p>Exploring mathematics, science, and algorithms with beautiful visualizations.</p>
     </div>
-  </div>
+  </section>
 
+  <!-- Visualizations -->
+  <section id="visuals">
+    <div>
+      <h2>Visualizations</h2>
+      <p>Dynamic demonstrations of algorithms and scientific concepts will live here.</p>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <div>
+      <h2>Contact</h2>
+      <p>
+        <a href="https://github.com/yourname" target="_blank">GitHub</a> |
+        <a href="mailto:you@example.com">Email</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- JavaScript for background -->
   <script>
-    /* ---- 배경 삼각형 패턴 생성 ---- */
-    (function buildTriPattern(){
-      const g = document.getElementById('tris');
-      const W = window.innerWidth, H = window.innerHeight;
-      const size = 60;
-      for(let y=-size; y<H+size; y+=size){
-        for(let x=-size; x<W+size; x+=size){
-          const poly = document.createElementNS('http://www.w3.org/2000/svg','polygon');
-          const jitter = (Math.sin((x+y)/120)+1)*6;
-          const points = `${x},${y} ${x+size+Math.sin(y/40)*jitter},${y} ${x+size/2},${y+size+Math.cos(x/40)*jitter}`;
-          poly.setAttribute('points', points);
-          poly.setAttribute('fill','url(#g1)');
-          poly.setAttribute('transform', `rotate(${(x+y)%45},${x+size/2},${y+size/2})`);
-          poly.style.opacity = (Math.abs((x+y)%200)-60)/200;
-          g.appendChild(poly);
-        }
-      }
-    })();
+    const canvas = document.getElementById('bg');
+    const ctx = canvas.getContext('2d');
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
 
-    /* ---- 캔버스 기반 동적 시각화 (파티클 + 모드) ---- */
-    (function dynamicViz(){
-      const viz = document.getElementById('viz');
-      const canvas = document.createElement('canvas');
-      canvas.width = Math.min(1200, window.innerWidth*0.9);
-      canvas.height = 360;
-      canvas.style.width = '100%';
-      canvas.style.height = '100%';
-      viz.appendChild(canvas);
-      const ctx = canvas.getContext('2d');
-
-      let particles = [];
-      const rand = (a,b)=>(Math.random()*(b-a)+a);
-
-      function makeParticles(n){
-        particles = [];
-        for(let i=0;i<n;i++){
-          particles.push({
-            x: rand(0, canvas.width),
-            y: rand(0, canvas.height),
-            vx: rand(-0.6,0.6),
-            vy: rand(-0.6,0.6),
-            r: rand(1.5,3.5),
-            hue: rand(180,320)
-          });
-        }
-      }
-
-      let anim = null;
-      let paused = false;
-      let speed = 1.4;
-      let mode = 'mesh';
-
-      function step(){
-        if(paused) return;
-        ctx.clearRect(0,0,canvas.width,canvas.height);
-
-        // 연결선
-        for(let i=0;i<particles.length;i++){
-          for(let j=i+1;j<particles.length;j++){
-            const a = particles[i], b = particles[j];
-            const dx=a.x-b.x, dy=a.y-b.y;
-            const d = Math.hypot(dx,dy);
-            if(mode==='mesh' && d<120){
-              ctx.beginPath();
-              ctx.strokeStyle = `hsla(${(a.hue+b.hue)/2},80%,60%,${1 - d/120})`;
-              ctx.lineWidth = 0.6; ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
-            }
-          }
-        }
-
-        // 파티클 그리기 및 물리 업데이트
-        for(const p of particles){
-          // 모드별 위치 업데이트
-          if(mode==='waves'){
-            const t = Date.now()/800;
-            p.y = canvas.height/2 + Math.sin((p.x/40)+t*speed)*60;
-            p.x += p.vx*speed;
-            if(p.x<0) p.x = canvas.width; if(p.x>canvas.width) p.x=0;
-          } else if(mode==='orbits'){
-            const cx = canvas.width/2, cy = canvas.height/2;
-            const ang = Math.atan2(p.y-cy, p.x-cx) + 0.002*speed;
-            const r = Math.hypot(p.x-cx, p.y-cy);
-            p.x = cx + Math.cos(ang)*r; p.y = cy + Math.sin(ang)*r;
-          } else { // mesh default: free movement with gentle bounce
-            p.x += p.vx*speed; p.y += p.vy*speed;
-            if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
-            if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
-          }
-
-          // draw
-          ctx.beginPath();
-          const g = ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*6);
-          g.addColorStop(0, `hsla(${p.hue},85%,65%,0.95)`);
-          g.addColorStop(1, `hsla(${p.hue},85%,65%,0.02)`);
-          ctx.fillStyle = g;
-          ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-          ctx.fill();
-        }
-
-        anim = requestAnimationFrame(step);
-      }
-
-      // UI 연결
-      const countEl = document.getElementById('count');
-      const speedEl = document.getElementById('speed');
-      const modeEl = document.getElementById('mode');
-      const restart = document.getElementById('restart');
-      const pauseBtn = document.getElementById('pause');
-
-      function restartAnim(){
-        cancelAnimationFrame(anim);
-        makeParticles(parseInt(countEl.value,10));
-        paused = false;
-        anim = requestAnimationFrame(step);
-        pauseBtn.textContent = '일시정지';
-      }
-
-      countEl.addEventListener('input', ()=> makeParticles(parseInt(countEl.value,10)));
-      speedEl.addEventListener('input', ()=> speed = parseFloat(speedEl.value));
-      modeEl.addEventListener('change', ()=> mode = modeEl.value);
-      restart.addEventListener('click', restartAnim);
-      pauseBtn.addEventListener('click', ()=>{ paused = !paused; if(!paused) { anim = requestAnimationFrame(step); pauseBtn.textContent='일시정지'; } else { cancelAnimationFrame(anim); pauseBtn.textContent='다시시작'; } });
-
-      // 초기화
-      makeParticles(parseInt(countEl.value,10));
-      anim = requestAnimationFrame(step);
-
-      // 리사이즈 처리
-      let resizeTO;
-      window.addEventListener('resize', ()=>{
-        clearTimeout(resizeTO);
-        resizeTO = setTimeout(()=>{
-          canvas.width = Math.min(1200, window.innerWidth*0.9);
-          canvas.height = 360;
-          makeParticles(particles.length);
-        }, 120);
+    let stars = [];
+    for(let i=0; i<150; i++) {
+      stars.push({
+        x: Math.random()*canvas.width,
+        y: Math.random()*canvas.height,
+        r: Math.random()*2,
+        dx: (Math.random()-0.5)*0.5,
+        dy: (Math.random()-0.5)*0.5
       });
+    }
 
-    })();
+    function animate() {
+      ctx.fillStyle = "rgba(0,0,0,0.2)";
+      ctx.fillRect(0,0,canvas.width,canvas.height);
+
+      stars.forEach(s => {
+        ctx.beginPath();
+        ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+        ctx.fillStyle = "#00d4ff";
+        ctx.fill();
+
+        s.x += s.dx;
+        s.y += s.dy;
+
+        if(s.x<0||s.x>canvas.width) s.dx*=-1;
+        if(s.y<0||s.y>canvas.height) s.dy*=-1;
+      });
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    window.onresize = () => {
+      canvas.width = innerWidth;
+      canvas.height = innerHeight;
+    };
   </script>
 </body>
 </html>
