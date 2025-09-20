@@ -144,36 +144,29 @@
         const y = centerY + o.radius * Math.sin(o.angle);
 
         // 점(행성)
-        oCtx.shadowColor = colors[i%colors.length]; // 각 점 색과 동일하게
+        oCtx.shadowColor = colors[i%colors.length];
         oCtx.shadowBlur = 15;
         oCtx.beginPath();
-        oCtx.arc(x, y, 20, 0, Math.PI*2); // 점 크기 10
+        oCtx.arc(x, y, 20, 0, Math.PI*2);
         oCtx.fillStyle = colors[i % colors.length];
         oCtx.fill();
-
-        // 글로우 해제
         oCtx.shadowColor = 'transparent';
         oCtx.shadowBlur = 0;
-
-        // 아이콘 마우스 오버 확대 + 글로우
+        
+        // 아이콘 마우스 오버 확대
+        let iconSize = 25;
         const distance = Math.hypot(mouseX - x, mouseY - y);
-        let iconSize = 25; // 기본 아이콘 작게
-
-        // 아이콘 글로우 초기화
-        oCtx.shadowColor = 'transparent';
-        oCtx.shadowBlur = 0;
         if(distance < 32){
-          iconSize = 38; // 마우스 오버 시 확대
+          iconSize = 38;
           oCtx.shadowColor = '#fff';
           oCtx.shadowBlur = 10;
         }
+        
+        // 이미지 아이콘 그리기 (중앙 기준)
+        oCtx.drawImage(o.imageObj, x - iconSize/2, y - iconSize/2, iconSize, iconSize);
+        oCtx.shadowColor = 'transparent';
+        oCtx.shadowBlur = 0;
 
-        // Material Icon 그리기
-        oCtx.drawImage(o.imageObj, x, y, 32, 32);
-        oCtx.textAlign = 'center';
-        oCtx.textBaseline = 'middle';
-        oCtx.fillStyle = '#fff';
-        oCtx.fillText(o.icon, x, y);
 
         // 회전 업데이트
         if(!isPaused) o.angle += o.speed;
