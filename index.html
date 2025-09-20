@@ -140,10 +140,10 @@
 
         // 아이콘 마우스 오버 확대 + 글로우
         const distance = Math.hypot(mouseX - x, mouseY - y);
-        let iconSize = 10; // 기본 아이콘 작게
+        let iconSize = 25; // 기본 아이콘 작게
         oCtx.shadowBlur = 0;
         if(distance < 32){
-          iconSize = 15; // 마우스 오버 시 확대
+          iconSize = 42; // 마우스 오버 시 확대
           oCtx.shadowColor = '#fff';
           oCtx.shadowBlur = 20;
         }
