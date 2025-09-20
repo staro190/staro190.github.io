@@ -100,8 +100,10 @@
       { radius: 130, speed: 0.015, angle: Math.PI/2, icon: 'computer', link: 'cs_main.html' },
       { radius: 200, speed: 0.01, angle: Math.PI, icon: 'shield', link: 'cyber.html' }
     ];
+    
+    
+    const colors = ['#4dd0e1', '#d291ff', '#ffdf70']; // 낮은 채도
 
-    const colors = ['#00d4ff', '#ff6fff', '#ffd700'];
 
     let mouseX = -1000, mouseY = -1000;
     let isPaused = false;
@@ -150,7 +152,7 @@
         let iconSize = 25; // 기본 아이콘 작게
         oCtx.shadowBlur = 0;
         if(distance < 32){
-          iconSize = 42; // 마우스 오버 시 확대
+          iconSize = 38; // 마우스 오버 시 확대
           oCtx.shadowColor = '#fff';
           oCtx.shadowBlur = 20;
         }
