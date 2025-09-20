@@ -134,10 +134,9 @@
         const x = centerX + o.radius * Math.cos(o.angle);
         const y = centerY + o.radius * Math.sin(o.angle);
 
+        // 점(행성)
         oCtx.shadowColor = colors[i%colors.length]; // 각 점 색과 동일하게
         oCtx.shadowBlur = 15;
-
-        // 점 그리기 (크기 크게)
         oCtx.beginPath();
         oCtx.arc(x, y, 20, 0, Math.PI*2); // 점 크기 10
         oCtx.fillStyle = colors[i % colors.length];
@@ -150,11 +149,14 @@
         // 아이콘 마우스 오버 확대 + 글로우
         const distance = Math.hypot(mouseX - x, mouseY - y);
         let iconSize = 25; // 기본 아이콘 작게
+
+        // 아이콘 글로우 초기화
+        oCtx.shadowColor = 'transparent';
         oCtx.shadowBlur = 0;
         if(distance < 32){
           iconSize = 38; // 마우스 오버 시 확대
           oCtx.shadowColor = '#fff';
-          oCtx.shadowBlur = 20;
+          oCtx.shadowBlur = 10;
         }
 
         // Material Icon 그리기
