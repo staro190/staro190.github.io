@@ -3,69 +3,131 @@
 <head>
   <meta charset="UTF-8">
   <title>Orbit of Learning</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="./css/style.css">
+  <style>
+    body { margin:0; overflow-x:hidden; background:#000; color:#fff; font-family:sans-serif; }
+    .center-menu { position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); text-align:center; z-index:10; }
+    .center-menu h1 { font-size:3em; margin-bottom:20px; }
+    .center-menu nav a { margin:0 15px; color:#fff; text-decoration:none; font-size:1.2em; }
+    canvas { display:block; }
+  </style>
 </head>
 <body>
+  <!-- 배경 파티클 -->
   <canvas id="bg"></canvas>
 
+  <!-- 중앙 메뉴 -->
   <div class="center-menu">
     <h1>Orbit of Learning</h1>
     <nav>
       <a href="about.html">About</a>
-      <a href="cs_main">Computer Science</a>
+      <a href="cs_main.html">Computer Science</a>
       <a href="contact.html">Contact</a>
     </nav>
   </div>
 
+  <!-- 하단 궤도 캔버스 -->
   <canvas id="orbitCanvas" style="position: fixed; bottom:0; left:0; width:100%; height:200px; z-index:5;"></canvas>
 
+  <!-- 배경 파티클 JS -->
   <script src="./js/bg.js"></script>
-    
+
+  <!-- 하단 궤도 + 아이콘 JS -->
   <script>
     const orbitCanvas = document.getElementById('orbitCanvas');
     const oCtx = orbitCanvas.getContext('2d');
     orbitCanvas.width = window.innerWidth;
     orbitCanvas.height = 200;
-    
+
     const centerX = orbitCanvas.width / 2;
-    const centerY = 100; // 캔버스 높이 절반
-    
-    // 궤도 설정
+    const centerY = 100;
+
     const orbits = [
-      { radius: 40, speed: 0.02, angle: 0 },
-      { radius: 70, speed: 0.015, angle: Math.PI/2 },
-      { radius: 100, speed: 0.01, angle: Math.PI }
+      { radius: 40, speed: 0.02, angle: 0, icon: 'memory', link: 'ai.html' },     // 인공지능
+      { radius: 70, speed: 0.015, angle: Math.PI/2, icon: 'computer', link: 'cs_main.html' }, // 컴퓨터공학
+      { radius: 100, speed: 0.01, angle: Math.PI, icon: 'shield', link: 'cyber.html' }       // 사이버보안
     ];
-    
+
     const colors = ['#00d4ff', '#ff6fff', '#ffd700'];
-    
+
+    let mouseX = -1000, mouseY = -1000;
+    let isPaused = false;
+
+    orbitCanvas.addEventListener('mousemove', (e)=>{
+      const rect = orbitCanvas.getBoundingClientRect();
+      mouseX = e.clientX - rect.left;
+      mouseY = e.clientY - rect.top;
+    });
+
+    orbitCanvas.addEventListener('mouseenter', ()=>{ isPaused = true; });
+    orbitCanvas.addEventListener('mouseleave', ()=>{
+      isPaused = false;
+      mouseX = -1000; mouseY = -1000;
+    });
+
     function drawOrbit() {
       oCtx.clearRect(0,0,orbitCanvas.width, orbitCanvas.height);
-    
+
       orbits.forEach((o,i)=>{
         // 궤도 원
         oCtx.beginPath();
         oCtx.strokeStyle = 'rgba(255,255,255,0.2)';
         oCtx.arc(centerX, centerY, o.radius, 0, Math.PI*2);
         oCtx.stroke();
-    
-        // 이동 점
+
+        // 점 위치
         const x = centerX + o.radius * Math.cos(o.angle);
         const y = centerY + o.radius * Math.sin(o.angle);
-    
+
+        // 점 그리기
         oCtx.beginPath();
         oCtx.arc(x, y, 6, 0, Math.PI*2);
-        oCtx.fillStyle = colors[i%colors.length];
+        oCtx.fillStyle = colors[i % colors.length];
         oCtx.fill();
-    
-        // 각도 업데이트
-        o.angle += o.speed;
+
+        // 아이콘 마우스 오버 확대 + 글로우
+        const distance = Math.hypot(mouseX - x, mouseY - y);
+        let iconSize = 32;
+        oCtx.shadowBlur = 0;
+        if(distance < 32){
+          iconSize = 48;
+          oCtx.shadowColor = '#fff';
+          oCtx.shadowBlur = 20;
+        }
+
+        // Material Icon 그리기
+        oCtx.font = iconSize + 'px Material Icons';
+        oCtx.textAlign = 'center';
+        oCtx.textBaseline = 'middle';
+        oCtx.fillStyle = '#fff';
+        oCtx.fillText(o.icon, x, y);
+
+        // 회전 업데이트
+        if(!isPaused) o.angle += o.speed;
       });
-    
+
       requestAnimationFrame(drawOrbit);
     }
+
     drawOrbit();
-    
+
+    // 클릭 이벤트
+    orbitCanvas.addEventListener('click', (e)=>{
+      const rect = orbitCanvas.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const clickY = e.clientY - rect.top;
+
+      orbits.forEach(o=>{
+        const x = centerX + o.radius * Math.cos(o.angle);
+        const y = centerY + o.radius * Math.sin(o.angle);
+        const distance = Math.hypot(clickX - x, clickY - y);
+        if(distance < 24){
+          window.location.href = o.link;
+        }
+      });
+    });
+
     // 반응형
     window.addEventListener('resize', ()=>{
       orbitCanvas.width = window.innerWidth;
