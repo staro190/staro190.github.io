@@ -99,7 +99,12 @@
       { radius: 130, speed: 0.015, angle: Math.PI/2, icon: './img/terminal.png', link: 'cs_main.html' },
       { radius: 200, speed: 0.01, angle: Math.PI, icon: './img/shield.png', link: 'cyber.html' }
     ];
-    
+
+    orbits.forEach(o=>{
+      const img = new Image();
+      img.src = o.img;
+      o.imageObj = img;
+    });
     
     //const colors = ['#4dd0e1', '#d291ff', '#ffdf70']; // 낮은 채도
     const colors = [
@@ -164,7 +169,7 @@
         }
 
         // Material Icon 그리기
-        oCtx.font = iconSize + 'px Material Icons';
+        oCtx.drawImage(o.imageObj, x, y, 32, 32);
         oCtx.textAlign = 'center';
         oCtx.textBaseline = 'middle';
         oCtx.fillStyle = '#fff';
