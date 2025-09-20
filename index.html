@@ -180,36 +180,33 @@
       });
     });
 
-    function resizeOrbitCanvas(){
+    function resizeOrbitCanvas() {
       const dpr = window.devicePixelRatio || 1;
     
-      // 캔버스 실제 픽셀 수
-      orbitCanvas.width = window.innerWidth * dpr;
-      orbitCanvas.height = 200 * dpr;
+      // CSS 기준 크기
+      const canvasWidth = window.innerWidth;
+      const canvasHeight = 200;      // 원하는 높이
+      const canvasBottom = 100;      // 화면 하단에서 띄울 거리
     
-      // CSS 크기
-      orbitCanvas.style.width = window.innerWidth + 'px';
-      orbitCanvas.style.height = '200px';
+      orbitCanvas.width = canvasWidth * dpr;
+      orbitCanvas.height = canvasHeight * dpr;
+      orbitCanvas.style.width = canvasWidth + 'px';
+      orbitCanvas.style.height = canvasHeight + 'px';
+      orbitCanvas.style.bottom = canvasBottom + 'px';
     
-      // 컨텍스트 스케일 조정
-      oCtx.setTransform(1, 0, 0, 1, 0, 0); // 초기화
+      // DPI 보정
+      oCtx.setTransform(1, 0, 0, 1, 0, 0);
       oCtx.scale(dpr, dpr);
     
-      // 중심점 업데이트 (CSS 기준 좌표)
-      centerX = window.innerWidth / 2;
-      centerY = 100; 
+      // 중심 좌표 (캔버스 내부 좌표 기준)
+      centerX = canvasWidth / 2;
+      centerY = canvasHeight / 2;
     }
     
     // 초기화
     resizeOrbitCanvas();
-    
-    // 반응형
-    window.addEventListener('resize', ()=>{
-      orbitCanvas.width = window.innerWidth;
-      orbitCanvas.height = 200;
-      centerX = orbitCanvas.width / 2;
-      centerY = orbitCanvas.height / 2;
-    });
+    window.addEventListener('resize', resizeOrbitCanvas);
+
   </script>
 </body>
 </html>
