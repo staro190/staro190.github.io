@@ -82,16 +82,16 @@
 
         // 점 그리기
         oCtx.beginPath();
-        oCtx.arc(x, y, 6, 0, Math.PI*2);
+        oCtx.arc(x, y, 20, 0, Math.PI*2);
         oCtx.fillStyle = colors[i % colors.length];
         oCtx.fill();
 
         // 아이콘 마우스 오버 확대 + 글로우
         const distance = Math.hypot(mouseX - x, mouseY - y);
-        let iconSize = 32;
+        let iconSize = 10;
         oCtx.shadowBlur = 0;
         if(distance < 32){
-          iconSize = 48;
+          iconSize = 15;
           oCtx.shadowColor = '#fff';
           oCtx.shadowBlur = 20;
         }
