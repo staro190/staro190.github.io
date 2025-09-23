@@ -1,0 +1,27 @@
+[
+  {
+    "name": "Computer Science",
+    "imgSrc": "../img/planet1.png",
+    "link": "cs_main.html"
+  },
+  {
+    "name": "Artificial Intelligence",
+    "imgSrc": "../img/planet_ai.png",
+    "link": "ai_main.html"
+  },
+  {
+    "name": "Cyber Security",
+    "imgSrc": "../img/planet_sec.png",
+    "link": "sec_main.html"
+  },
+  {
+    "name": "Algorithm",
+    "imgSrc": "../img/planet_algo.png",
+    "link": "algo_main.html"
+  },
+  {
+    "name": "Network",
+    "imgSrc": "../img/planet_net.png",
+    "link": "net_main.html"
+  }
+]

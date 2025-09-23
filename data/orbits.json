@@ -1,0 +1,23 @@
+[
+  { 
+    "radius": 70, 
+    "speed": 0.02, 
+    "angle": 0, 
+    "icon": "./img/neurology.png", 
+    "link": "ai.html" 
+  },
+  { 
+    "radius": 130, 
+    "speed": 0.015, 
+    "angle": 1.5707963267948966, 
+    "icon": "./img/terminal.png", 
+    "link": "cs_main.html" 
+  },
+  { 
+    "radius": 200, 
+    "speed": 0.01, 
+    "angle": 3.141592653589793, 
+    "icon": "./img/shield.png", 
+    "link": "cyber.html" 
+  }
+]

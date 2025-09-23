@@ -1,0 +1,202 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    background: #000;
+    color: #fff;
+    font-family: 'Orbitron', sans-serif;
+}
+
+#bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+#planet-image {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    width: 250px;
+    height: 250px;
+    object-fit: contain;
+    z-index: 10;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.hud-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    z-index: 20;
+    pointer-events: none;
+}
+
+.hud-container h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    color: #00d4ff;
+    text-shadow: 0 0 10px #00d4ff;
+    position: absolute;
+    top: 15%;
+}
+
+#selected-planet-name {
+    font-size: 2em;
+    height: 60px;
+    line-height: 60px;
+    color: #fff;
+    text-shadow: 0 0 15px #fff;
+    margin-top: 200px;
+}
+
+#warp-button {
+    pointer-events: all;
+    margin-top: 320px;
+    padding: 15px 40px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.2em;
+    color: #000;
+    background: #00d4ff;
+    border: 2px solid #00d4ff;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 20px #00d4ff;
+}
+
+#warp-button:hover {
+    background: #fff;
+    color: #00d4ff;
+    box-shadow: 0 0 30px #fff;
+}
+
+/* ===== ✨ 익스플로러 패널 스타일 (수정) ✨ ===== */
+#explorer-panel {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 280px;
+    background: rgba(10, 20, 30, 0.75);
+    backdrop-filter: blur(5px);
+    z-index: 30;
+    /* 🚨 padding과 overflow-y 속성 제거! */
+    box-sizing: border-box;
+    border-right: 1px solid rgba(0, 212, 255, 0.3);
+    pointer-events: all;
+    color: #e0e0e0;
+    transition: transform 0.4s ease-in-out;
+    /* ✨ 내부 요소를 정렬하기 위해 flex 추가 */
+    display: flex;
+    flex-direction: column;
+}
+
+#explorer-panel.collapsed {
+    transform: translateX(-100%);
+}
+
+/* ✨ [새로운 스타일] 스크롤이 필요한 내부 컨텐츠 영역 */
+.explorer-content {
+    flex-grow: 1; /* 남는 공간을 모두 차지하도록 설정 */
+    overflow-y: auto; /* 이 영역만 스크롤되도록! */
+    padding: 25px; /* 패딩을 이쪽으로 이동 */
+}
+
+/* ✨ 토글 버튼 스타일 (수정 최종본) */
+#explorer-toggle {
+    position: fixed;
+    top: 20px;
+    left: 280px; 
+    width: 40px;
+    height: 40px;
+    background: rgba(10, 20, 30, 0.75);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-left: none;
+    color: #00d4ff;
+    cursor: pointer;
+    font-size: 1.5em;
+    padding: 0;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 0 5px 5px 0;
+    backdrop-filter: blur(5px);
+    /* 🚨 z-index를 패널(30)보다 높은 값으로 수정 */
+    z-index: 31; 
+    transition: left 0.4s ease-in-out;
+}
+
+#explorer-panel.collapsed {
+    transform: translateX(-100%);
+}
+
+#explorer-toggle.collapsed {
+    left: 0;
+}
+
+/* 새로 추가된 span 태그에 대한 스타일 */
+#explorer-toggle span {
+    display: inline-block; /* transform을 적용하기 위해 필요 */
+    transition: transform 0.4s ease-in-out; /* 애니메이션을 span으로 이동 */
+}
+
+/* 접혔을 때 span(문자)만 뒤집도록 변경 */
+#explorer-toggle.collapsed span {
+    transform: scaleX(-1);
+}
+
+/* ✨ 트리 구조 스타일 */
+#planet-list ul {
+    list-style: none;
+    padding-left: 20px; /* 하위 메뉴 들여쓰기 */
+    margin-top: 10px;
+}
+
+#planet-list .category {
+    font-weight: bold;
+    color: #88ddff;
+    display: block;
+    margin-top: 20px;
+    font-size: 1.2em;
+}
+
+#planet-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#planet-list li a {
+    color: #e0e0e0;
+    text-decoration: none;
+    font-size: 1.1em;
+    display: block;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+#planet-list li a:hover {
+    background: rgba(0, 212, 255, 0.2);
+    color: #fff;
+    border-color: rgba(0, 212, 255, 0.5);
+}
+
+#planet-list li a.active {
+    background: #00d4ff;
+    color: #000;
+    font-weight: bold;
+    box-shadow: 0 0 15px #00d4ff;
+    border-color: #00d4ff;
+}

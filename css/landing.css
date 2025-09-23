@@ -1,0 +1,37 @@
+body { 
+    margin: 0; 
+    overflow-x: hidden; 
+    background: #000; 
+    color: #fff; 
+    font-family: sans-serif; 
+}
+
+.center-menu { 
+    position: absolute; 
+    top: 20%;
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    text-align: center; 
+    z-index: 10; 
+}
+
+.center-menu h1 { 
+    font-size: 3em; 
+    margin-bottom: 20px; 
+}
+
+.center-menu nav a { 
+    margin: 0 15px; 
+    color: #fff; 
+    text-decoration: none; 
+    font-size: 1.2em; 
+}
+
+canvas { 
+    display: block; 
+}
+
+/* 궤도 캔버스는 JS에서 위치를 제어하므로 기본 스타일만 유지 */
+#orbitCanvas {
+    position: fixed;
+}
