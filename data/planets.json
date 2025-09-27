@@ -6,22 +6,22 @@
   },
   {
     "name": "Artificial Intelligence",
-    "imgSrc": "../img/planet_ai.png",
+    "imgSrc": "../img/planet2.png",
     "link": "ai_main.html"
   },
   {
     "name": "Cyber Security",
-    "imgSrc": "../img/planet_sec.png",
+    "imgSrc": "../img/planet3.png",
     "link": "sec_main.html"
   },
   {
     "name": "Algorithm",
-    "imgSrc": "../img/planet_algo.png",
+    "imgSrc": "../img/planet4.png",
     "link": "algo_main.html"
   },
   {
     "name": "Network",
-    "imgSrc": "../img/planet_net.png",
+    "imgSrc": "../img/planet5.png",
     "link": "net_main.html"
   }
 ]
