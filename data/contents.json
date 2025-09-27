@@ -1,0 +1,62 @@
+[
+  {
+    "title": "Star System",
+    "href": "../index.html"
+  },
+  {
+    "title": "About Me",
+    "href": "./page/about.html"
+  },
+  {
+    "title": "Projects",
+    "isCategory": true,
+    "children": [
+      {
+        "title": "Project A",
+        "href": "/projects/project-a.html"
+      },
+      {
+        "title": "Project B",
+        "href": "/projects/project-b.html"
+      },
+      {
+        "title": "Internal Tools",
+        "isCategory": true,
+        "children": [
+          {
+            "title": "Dashboard",
+            "href": "/projects/tools/dashboard.html"
+          },
+          {
+            "title": "Data Analyzer",
+            "href": "/projects/tools/analyzer.html"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Blog",
+    "isCategory": true,
+    "children": [
+      {
+        "title": "2025년 기록",
+        "isCategory": true,
+        "children": [
+          {
+            "title": "버블 정렬",
+            "href": "../blog/algorithm/bubble/bubble.html"
+          },
+          {
+            "title": "두 번째 기록",
+            "href": "/blog/2025/post-2.html"
+          }
+        ]
+      },
+      {
+        "title": "2024년 기록",
+        "href": "/blog/2024/"
+      }
+    ]
+  }
+]
