@@ -4,16 +4,11 @@ import {initializeBackground} from "/js/common.js";
 // =======================================================================
 async function loadMarkdownPost() {
     try {
-        // 2단계에서 만든 마크다운 파일을 fetch로 불러옵니다.
         const response = await fetch('./bubble.md');
         if (!response.ok) throw new Error('마크다운 파일을 불러오는 데 실패했습니다.');
         
         const markdownText = await response.text();
-        
-        // Marked.js 라이브러리를 사용해 마크다운을 HTML로 변환합니다.
         const postHTML = marked.parse(markdownText);
-        
-        // 3단계에서 만든 main 태그 안에 변환된 HTML을 삽입합니다.
         document.getElementById('post-content').innerHTML = postHTML;
 
     } catch (error) {
