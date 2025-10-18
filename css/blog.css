@@ -1,0 +1,44 @@
+/* Google Fonts에서 폰트 가져오기 */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=Orbitron:wght@700&display=swap');
+
+/* 배경 canvas 스타일 */
+#bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #000;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+/* 전체 페이지 스타일 */
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    line-height: 1.8;
+    /* ✅ 본문 글자색을 흰색으로 변경 */
+    color: #ffffff; 
+    background-color: #000000;
+    margin: 0;
+    padding: 20px;
+}
+
+/* 메인 콘텐츠 영역 스타일 */
+main#post-content {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #000000b2;
+    padding: 20px 40px;
+    border-radius: 8px;
+    border: 1px solid #00d5ff5b;
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+}
+
+/* 제목(h1, h2) 스타일 */
+main#post-content h1, main#post-content h2 {
+    font-family: 'Orbitron', sans-serif;
+    /* ✅ 제목 색상은 이미 푸른 계열입니다. */
+    color: #00d4ff; 
+    letter-spacing: 1px;
+    text-shadow: 0 0 5px rgba(0, 212, 255, 0.7);
+}
