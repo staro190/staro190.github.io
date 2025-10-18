@@ -39,13 +39,12 @@ function setupPlanetSortVisualization() {
     const startBtn = document.getElementById('start-sort-btn');
     const animationSpeed = 1000;
 
-    // 행성 데이터에 고유 색상(color) 속성 추가
     const planetsData = [
         { name: '수성', order: 0, img: '/img/planets/mercury.png', color: '#9E9E9E' }, // Gray
-        { name: '금성', order: 1, img: '/img/planets/venus.png',   color: '#FFEB3B' }, // Yellow
-        { name: '지구', order: 2, img: '/img/planets/earth.png',   color: '#42A5F5' }, // Blue
+        { name: '금성', order: 1, img: '/img/planets/venus.png',   color: '#FF7F00' }, // Orange
+        { name: '지구', order: 2, img: '/img/planets/earth.png',   color: '#87BC49' }, // Green
         { name: '화성', order: 3, img: '/img/planets/mars.png',     color: '#E57373' }, // Red
-        { name: '목성', order: 4, img: '/img/planets/jupiter.png', color: '#FFB74D' }, // Orange
+        { name: '목성', order: 4, img: '/img/planets/jupiter.png', color: '#964B00' }, // Brown
         { name: '토성', order: 5, img: '/img/planets/saturn.png',   color: '#FFF176' }, // Pale Gold
         { name: '천왕성', order: 6, img: '/img/planets/uranus.png', color: '#4DD0E1' }, // Cyan
         { name: '해왕성', order: 7, img: '/img/planets/neptune.png', color: '#5C6BC0' }  // Indigo
@@ -90,228 +89,271 @@ function setupPlanetSortVisualization() {
         return stepDiv;
     }
     
-    function initializePlanets() {
+    async function initializePlanets() {
         historyContainer.querySelectorAll('.sort-step').forEach(el => el.remove());
         svgContainer.innerHTML = '';
         currentPlanetState = shuffleArray([...planetsData]);
         const initialStep = createStepRow(currentPlanetState, -1, 0);
         historyContainer.appendChild(initialStep);
+
+        await sleep(50);
     }
 
     const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-    function drawTrail(pathData, color, ...classNames) {
-        const trail = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        trail.setAttribute('d', pathData);
-        trail.classList.add('planet-trail', ...classNames);
-        trail.style.stroke = color;
-        svgContainer.appendChild(trail);
+    // ✅ 디버깅을 위해 이 코드로 drawTrail 함수를 완전히 교체해주세요.
+    // ✅ 이 코드로 drawTrail 함수를 완전히 교체해주세요.
+    // ✅ 이 코드가 최종 해결책입니다. 함수 전체를 교체해주세요.
+    /*
+function drawTrail(pathData, color, ...classNames) {
+    const trail = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    trail.setAttribute('d', pathData);
+    trail.classList.add('planet-trail', ...classNames);
+    trail.style.stroke = color;
+    svgContainer.appendChild(trail);
 
-        const length = trail.getTotalLength();
-        trail.style.strokeDasharray = length;
-        trail.style.strokeDashoffset = length;
-        setTimeout(() => {
-            trail.style.strokeDashoffset = 0;
-        }, 50);
+    const length = trail.getTotalLength();
+
+    if (length === 0) {
+        console.error("오류: 경로 길이가 0입니다.");
+        return; 
     }
 
-    async function sortPlanets() {
-        startBtn.disabled = true;
-        let stepCounter = 1;
+    // 1. 애니메이션 시작 상태 설정 (궤적이 안 보이는 상태)
+    trail.style.strokeDasharray = length;
+    trail.style.strokeDashoffset = length;
 
-        for (let i = 0; i < currentPlanetState.length - 1; i++) {
-            let minIndex = i;
-            for (let j = i + 1; j < currentPlanetState.length; j++) {
-                if (currentPlanetState[j].order < currentPlanetState[minIndex].order) {
-                    minIndex = j;
-                }
-            }
-            
-            const prevStepDiv = historyContainer.lastChild;
-            const prevPlanets = prevStepDiv.querySelectorAll('.planet'); // 이전 줄의 모든 행성 이미지 DOM
-            const containerRect = historyContainer.getBoundingClientRect();
+    // ★★★★★ 결정적인 수정 코드 ★★★★★
+    // 브라우저가 위의 스타일 변경(시작 상태)을 렌더링하도록 강제로 동기화합니다.
+    // 이 코드는 요소의 너비를 읽어오며, 정확한 계산을 위해 브라우저가
+    // 최신 스타일을 화면에 반영하도록 만듭니다.
+    void trail.offsetWidth; 
 
-            // 현재 단계의 행성 상태 (아직 DOM에 추가되지 않음)
-            const tempState = [...currentPlanetState]; // 현재 currentPlanetState 복사본
-            if (minIndex !== i) { // 교체가 필요한 경우
-                [tempState[i], tempState[minIndex]] = [tempState[minIndex], tempState[i]]; // 임시로 교체
-            }
-            
-            // 다음 단계의 DOM 요소를 미리 생성 (실제 시각적 위치는 아직 확정 안됨)
-            // placeholder는 교체되거나 움직일 행성 자리를 비워두는 용도
-            const invisibleIndices = minIndex !== i ? [i, minIndex] : []; // 교체 대상만 placeholder로
-            const nextStep = createStepRow(tempState, i, stepCounter, invisibleIndices);
-            historyContainer.appendChild(nextStep);
-            historyContainer.scrollTop = historyContainer.scrollHeight;
-            const nextPlanets = nextStep.querySelectorAll('.planet'); // 다음 줄의 모든 행성 이미지 DOM
-            
-            // ==== 모든 행성의 시작/끝 좌표 및 궤적 그리기 & 애니메이션 클론 준비 ====
-            const animatingClones = []; // 애니메이션할 클론들을 담을 배열
-            const animatingSourcePlanets = []; // 애니메이션할 원본 행성들을 담을 배열
+    // 2. 다음 프레임에서 애니메이션 목표 상태로 변경
+    requestAnimationFrame(() => {
+        trail.style.strokeDashoffset = 0;
+    });
+}*/
+// ✅ CSS 대신 JS로 직접 애니메이션을 구현하는 최종 코드입니다.
+function drawTrail(pathData, color, ...classNames) {
+    const trail = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    trail.setAttribute('d', pathData);
+    trail.classList.add('planet-trail', ...classNames);
+    trail.style.stroke = color;
+    svgContainer.appendChild(trail);
 
-            for (let k = 0; k < currentPlanetState.length; k++) {
-                const startPlanetDOM = prevPlanets[k];
-                // minIndex !== i 일 때, k === i 에 있던 행성은 tempState[minIndex] 위치로 가야 하고
-                // k === minIndex 에 있던 행성은 tempState[i] 위치로 가야 함
-                // 그 외 행성은 k 위치 그대로
-                let targetIndexInNextState = k;
-                if (minIndex !== i) { // 교체가 일어난 경우
-                    if (k === i) { // i번째 행성은 minIndex 위치로
-                        targetIndexInNextState = minIndex;
-                    } else if (k === minIndex) { // minIndex번째 행성은 i 위치로
-                        targetIndexInNextState = i;
-                    }
-                }
-                const endPlanetDOM = nextPlanets[targetIndexInNextState]; // k번째 행성의 최종 도착 DOM
+    const length = trail.getTotalLength();
+    if (length === 0) return;
 
-                const startRect = startPlanetDOM.getBoundingClientRect();
-                const endRect = endPlanetDOM.getBoundingClientRect();
-                
-                const startX = startRect.left - containerRect.left + startRect.width / 2;
-                const startY = startRect.top - containerRect.top + startRect.height / 2;
-                const endX = endRect.left - containerRect.left + endRect.width / 2;
-                const endY = endRect.top - containerRect.top + endRect.height / 2;
-                
-                const planetDataForColor = currentPlanetState[k]; // k번째 행성의 데이터 (색상 가져오기 위함)
-                const color = planetDataForColor.color;
+    // 궤적을 점선으로 만들기 위한 설정
+    trail.style.strokeDasharray = length;
 
-                let pathData;
-                let trailClass;
+    // --- JavaScript 애니메이션 로직 ---
+    const animationDuration = 1000; // 애니메이션 시간 (밀리초, 0.8초)
+    let startTime = null;
 
-                // 교체 대상인 경우 (대각선), 그 외는 수직선
-                if (minIndex !== i && (k === i || k === minIndex)) {
-                    pathData = `M ${startX} ${startY} L ${endX} ${endY}`;
-                    trailClass = 'trail-swap';
-                } else { // 교체 대상이 아니거나, 교체가 일어나지 않는 단계의 모든 행성
-                    pathData = `M ${startX} ${startY} L ${endX} ${endY}`;
-                    trailClass = 'trail-straight';
-                }
-                drawTrail(pathData, color, trailClass);
-
-                // 애니메이션 클론 생성 및 스타일 설정
-                const clone = startPlanetDOM.cloneNode();
-                clone.classList.add('planet-animating');
-                clone.style.boxShadow = `0 0 20px 5px ${color}`;
-                clone.style.top = `${startRect.top - containerRect.top}px`;
-                clone.style.left = `${startRect.left - containerRect.left}px`;
-                historyContainer.appendChild(clone);
-                
-                animatingClones.push(clone);
-                animatingSourcePlanets.push(startPlanetDOM); // 원본 DOM을 추적
-            }
-            
-            // 원본 행성들을 숨김 처리 (클론이 움직이는 동안)
-            animatingSourcePlanets.forEach(p => p.classList.add('planet-ghost'));
-
-            await sleep(50); // DOM 렌더링을 위한 잠시 대기
-
-            // 모든 클론을 최종 위치로 이동시키는 애니메이션 시작
-            animatingClones.forEach((clone, k) => {
-                const startPlanetDOM = prevPlanets[k];
-                let targetIndexInNextState = k;
-                if (minIndex !== i) {
-                    if (k === i) {
-                        targetIndexInNextState = minIndex;
-                    } else if (k === minIndex) {
-                        targetIndexInNextState = i;
-                    }
-                }
-                const endPlanetDOM = nextPlanets[targetIndexInNextState]; // k번째 행성의 최종 도착 DOM
-                const endRect = endPlanetDOM.getBoundingClientRect();
-
-                clone.style.top = `${endRect.top - containerRect.top}px`;
-                clone.style.left = `${endRect.left - containerRect.left}px`;
-            });
-            
-            await sleep(animationSpeed); // 애니메이션 시간 대기
-
-            // 애니메이션 완료 후 정리
-            animatingClones.forEach((clone, k) => {
-                clone.remove(); // 클론 제거
-                let targetIndexInNextState = k;
-                if (minIndex !== i) {
-                    if (k === i) {
-                        targetIndexInNextState = minIndex;
-                    } else if (k === minIndex) {
-                        targetIndexInNextState = i;
-                    }
-                }
-                // 최종 위치의 행성 placeholder 해제
-                nextPlanets[targetIndexInNextState].classList.remove('planet-placeholder');
-            });
-
-            // 실제 데이터 상태 업데이트
-            if (minIndex !== i) {
-                [currentPlanetState[i], currentPlanetState[minIndex]] = [currentPlanetState[minIndex], currentPlanetState[i]];
-            }
-            
-            stepCounter++;
+    // 'animate' 함수는 각 프레임을 그리는 역할을 합니다.
+    function animate(currentTime) {
+        if (!startTime) {
+            startTime = currentTime;
         }
+
+        // 시작부터 현재까지 흐른 시간
+        const elapsedTime = currentTime - startTime;
         
-        // 마지막 단계 (정렬 완료된 상태로 내려오는) 궤적 및 애니메이션
-        const lastStepDiv = historyContainer.lastChild;
-        const lastPlanets = lastStepDiv.querySelectorAll('.planet');
-        const finalStep = createStepRow(currentPlanetState, currentPlanetState.length - 1, stepCounter - 1); // final step은 마지막까지 정렬된 상태
-        historyContainer.appendChild(finalStep);
+        // 애니메이션 진행률 (0.0 ~ 1.0)
+        const progress = Math.min(elapsedTime / animationDuration, 1);
+        
+        // 진행률에 따라 궤적의 시작점을 이동시킴 (length -> 0)
+        const currentOffset = length * (1 - progress);
+        trail.style.strokeDashoffset = currentOffset;
+
+        // 애니메이션이 아직 끝나지 않았다면 다음 프레임을 요청
+        if (progress < 1) {
+            requestAnimationFrame(animate);
+        }
+    }
+
+    // 애니메이션 시작
+    requestAnimationFrame(animate);
+}
+    
+    /**
+     * @brief 두 행성 상태 간의 전환을 애니메이션으로 처리하는 함수
+     * @param {Array} fromState - 시작 상태의 행성 배열
+     * @param {Array} toState - 종료 상태의 행성 배열
+     * @param {number} sortedUntilIndex - 정렬이 완료된 위치의 인덱스
+     * @param {number} stepCounter - 현재 단계 번호
+     */
+    // ✅ 이 코드로 animateTransition 함수를 완전히 교체해주세요.
+    async function animateTransition(fromState, toState, sortedUntilIndex, stepCounter) {
+        historyContainer.appendChild(createStepRow(toState, sortedUntilIndex, stepCounter, []));
         historyContainer.scrollTop = historyContainer.scrollHeight;
-        const finalPlanets = finalStep.querySelectorAll('.planet');
+        svgContainer.style.height = `${historyContainer.scrollHeight}px`;
+
+        const allSteps = historyContainer.querySelectorAll('.sort-step');
+        const prevStepDiv = allSteps[allSteps.length - 2];
+        const nextStep = allSteps[allSteps.length - 1];
+        
+        nextStep.classList.add('step-ghost'); // ← 이 줄을 추가
+
+        if (!prevStepDiv) {
+            if (nextStep) {
+                const initialPlanets = nextStep.querySelectorAll('.planet');
+                initialPlanets.forEach(p => p.classList.remove('placeholder'));
+            }
+            return;
+        }
+
+        const prevPlanets = prevStepDiv.querySelectorAll('.planet');
+        const nextPlanets = nextStep.querySelectorAll('.planet');
+        
         const containerRect = historyContainer.getBoundingClientRect();
+        const computedStyle = window.getComputedStyle(historyContainer);
+        const borderLeft = parseFloat(computedStyle.borderLeftWidth);
+        const borderTop = parseFloat(computedStyle.borderTopWidth);
 
-        const finalClones = [];
-        const finalSourcePlanets = [];
+        let horizontalOffset = 0; // 기본 오차 값
+        const firstStepElement = document.querySelector('.planet'); // DOM에서 .sort-step 요소를 하나 찾습니다.
 
-        for (let k = 0; k < currentPlanetState.length; k++) {
-            const startPlanetDOM = lastPlanets[k];
-            const endPlanetDOM = finalPlanets[k];
-            if (!startPlanetDOM || !endPlanetDOM) continue; 
+        if (firstStepElement) {
+            // getComputedStyle을 사용해 최종 계산된 스타일 값을 가져옵니다.
+            const styles = window.getComputedStyle(firstStepElement);
+            // "10px" 같은 문자열로 값을 반환하므로, 숫자만 추출합니다.
+            horizontalOffset = parseFloat(styles.marginLeft); 
+        }
+
+        const movingIndices = [];
+        for (let i = 0; i < fromState.length; i++) {
+            if (fromState[i].order !== toState[i].order) { movingIndices.push(i); }
+        }
+
+        /*
+        for (let i = 0; i < fromState.length; i++) {
+            nextPlanets[i].classList.add('planet-placeholder');
+        }*/
+
+        
+
+        const animatingClones = [];
+        const animatingSourcePlanets = [];
+
+        for (let i = 0; i < fromState.length; i++) {
+            const startPlanetData = fromState[i];
+            const startPlanetDOM = prevPlanets[i];
+            const targetIndexInNextState = toState.findIndex(p => p.order === startPlanetData.order);
+            const endPlanetDOM = nextPlanets[targetIndexInNextState];
+
+            if (!startPlanetDOM || !endPlanetDOM) continue;
 
             const startRect = startPlanetDOM.getBoundingClientRect();
             const endRect = endPlanetDOM.getBoundingClientRect();
             
             if (startRect.width === 0 || endRect.width === 0) continue;
 
-            const startX = startRect.left - containerRect.left + startRect.width / 2;
-            const startY = startRect.top - containerRect.top + startRect.height / 2;
-            const endX = endRect.left - containerRect.left + endRect.width / 2;
-            const endY = endRect.top - containerRect.top + endRect.height / 2;
-            
-            const color = currentPlanetState[k].color;
-            drawTrail(`M ${startX} ${startY} L ${endX} ${endY}`, color, 'trail-straight');
+            // ★★★★★★★★★★ 바로 여기! ★★★★★★★★★★
+            // 스크롤된 Y 값을 더해서 실제 위치를 계산합니다.
+            const scrollTop = historyContainer.scrollTop;
 
+            const startX = startRect.left - containerRect.left - borderLeft + startRect.width / 2;
+            const startY = startRect.top - containerRect.top - borderTop + startRect.height / 2 + scrollTop;
+            const endX = endRect.left - containerRect.left - borderLeft + endRect.width / 2;
+            const endY = endRect.top - containerRect.top - borderTop + endRect.height / 2 + scrollTop;
+            // ★★★★★★★★★★★★★★★★★★★★★★★★★
+
+            const color = startPlanetData.color;
+            const pathData = `M ${startX} ${startY} L ${endX} ${endY}`;
+            const trailClass = (movingIndices.includes(i) || toState.findIndex(p => p.order === fromState[i].order) !== i) ? 'trail-swap' : 'trail-straight';
+            drawTrail(pathData, color, trailClass);
+            
             const clone = startPlanetDOM.cloneNode();
             clone.classList.add('planet-animating');
-            clone.style.boxShadow = `0 0 20px 5px ${color}`;
-            clone.style.top = `${startRect.top - containerRect.top}px`;
-            clone.style.left = `${startRect.left - containerRect.left}px`;
+            //clone.style.boxShadow = `0 0 20px 5px ${color}`;
+            clone.style.top = `${startY - borderTop - startRect.height / 2}px`;
+            clone.style.left = `${startX - horizontalOffset - startRect.width / 2}px`;
             historyContainer.appendChild(clone);
-
-            finalClones.push(clone);
-            finalSourcePlanets.push(startPlanetDOM);
+            
+            animatingClones.push({ 
+                clone, 
+                endTop: endY - endRect.height / 2,
+                endLeft: endX - horizontalOffset- endRect.width / 2,
+            });
+            animatingSourcePlanets.push(startPlanetDOM);
         }
         
-        finalSourcePlanets.forEach(p => p.classList.add('planet-ghost'));
+        animatingSourcePlanets.forEach(p => p.classList.add('planet-ghost'));
         await sleep(50);
 
-        finalClones.forEach((clone, k) => {
-            const endPlanetDOM = finalPlanets[k];
-            const endRect = endPlanetDOM.getBoundingClientRect();
-            clone.style.top = `${endRect.top - containerRect.top}px`;
-            clone.style.left = `${endRect.left - containerRect.left}px`;
+        animatingClones.forEach(({ clone, endTop, endLeft }) => {
+            clone.style.top = `${endTop}px`;
+            clone.style.left = `${endLeft}px`;
         });
-
+        
         await sleep(animationSpeed);
 
-        finalClones.forEach((clone, k) => {
-            clone.remove();
-            finalPlanets[k].classList.remove('planet-placeholder');
-        });
+        animatingClones.forEach(({ clone }) => clone.remove());
+        nextPlanets.forEach(planet => planet.classList.remove('planet-placeholder'));
+        nextStep.classList.remove('step-ghost'); // ← 이 줄을 추가
+
+        nextStep.classList.add('step-ghosted');
+    }
+
+    // ✅ sortPlanets 함수를 이 최종 코드로 전체 교체해주세요.
+    // ✅ 이 코드로 sortPlanets 함수를 완전히 교체해주세요.
+    async function sortPlanets() {
+        startBtn.disabled = true;
+        
+        let currentSortState = [...currentPlanetState];
+        let i = 0;
+        let stepCounter = 1;
+
+        while (i < currentSortState.length - 1) {
+            const fromState = [...currentSortState];
+
+            let minIndex = i;
+            for (let j = i + 1; j < fromState.length; j++) {
+                if (fromState[j].order < fromState[minIndex].order) {
+                    minIndex = j;
+                }
+            }
+            
+            const toState = [...fromState];
+            if (minIndex !== i) {
+                [toState[i], toState[minIndex]] = [toState[minIndex], toState[i]];
+            }
+            
+            // ★★★★★★★★★★ 해결책 ★★★★★★★★★★
+            // 1. 이번이 정렬의 마지막 단계인지 확인합니다.
+            const isFinalSortStep = (i === currentSortState.length - 2);
+            
+            // 2. 마지막 단계라면, 정렬 완료 인덱스를 i가 아닌 전체 길이로 설정하여
+            //    모든 행성에 정렬 완료 스타일이 적용되도록 합니다.
+            const sortedUntilIndex = isFinalSortStep ? currentSortState.length - 1 : i;
+            // ★★★★★★★★★★★★★★★★★★★★★★★★★
+
+            // 수정된 인덱스를 사용하여 애니메이션을 호출합니다.
+            await animateTransition(fromState, toState, sortedUntilIndex, stepCounter);
+            
+            currentSortState = toState;
+            i++;
+            stepCounter++;
+
+            await sleep(700);
+        }
+        
+        // 3. 루프 종료 후 중복으로 호출되던 아래 코드를 "삭제"합니다.
+        // currentPlanetState = currentSortState; // 이 줄도 필요 없습니다. 루프가 끝나면 이미 정렬된 상태입니다.
+        // const finalSortedState = [...currentPlanetState];
+        // await animateTransition(finalSortedState, finalSortedState, finalSortedState.length - 1, stepCounter);
 
         startBtn.disabled = false;
     }
 
-    startBtn.addEventListener('click', () => {
-        initializePlanets();
-        setTimeout(sortPlanets, 100);
+    startBtn.addEventListener('click', async () => {
+        // await를 사용해 initializePlanets가 렌더링 보장 시간까지 포함하여
+        // 완전히 끝날 때까지 기다립니다.
+        //await initializePlanets();
+        sortPlanets();
     });
 
     initializePlanets();
