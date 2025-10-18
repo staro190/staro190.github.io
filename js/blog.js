@@ -31,6 +31,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.log(params)
     // 2. 'markdown' 파라미터의 값을 추출합니다.
     const markdownFilePath = params.get('markdown');
+
+    const filePath = "/blog/algorithm/01.intro/intro.md";
+
+    // 정규식 설명:
+    // /blog/ 다음에 나오는 첫 번째 그룹(.*?)과 두 번째 그룹(.*?)을 찾습니다.
+    const regex = /\/blog\/(.*?)\/(.*?)\//;
+
+    const match = markdownFilePath.match(regex);
+
+    let title = "";
+    if (match && match.length > 2) {
+        // 찾은 두 그룹(match[1], match[2])을 '-'로 연결합니다.
+        title = `${match[1]}-${match[2]}`;
+    }
+
+    console.log(title);
+
+    document.title = title;
+
     console.log(markdownFilePath)
 
     // 이후 로직은 동일

@@ -7,6 +7,23 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
+    <script>
+        // 페이지가 로드되자마자 실행됩니다.
+        (function() {
+            // 1. 현재 페이지의 URL에서 파라미터 정보를 가져옵니다.
+            const params = new URLSearchParams(window.location.search);
+            console.log(params)
+
+            // 2. 'title'이라는 이름의 파라미터 값을 추출합니다.
+            const pageTitle = params.get('title'); // "About Me"
+            console.log(pageTitle)
+
+            // 3. 추출한 값이 있다면, 해당 값으로 탭 제목을 변경합니다.
+            if (pageTitle) {
+                document.title = pageTitle; // 탭 제목이 "About Me"로 변경됨
+            }
+        })();
+    </script>
     <main id="post-content"></main>
     <canvas id="bg"></canvas>
     <script type="module" src="/js/blog.js"></script>
