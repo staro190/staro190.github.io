@@ -1,0 +1,161 @@
+/* Google Fonts에서 폰트 가져오기 */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=Orbitron:wght@700&display=swap');
+
+/* ================================================== */
+/* === 행성 정렬 시각화 스타일 (수정 및 통합된 부분) === */
+/* ================================================== */
+
+/* 시각화 기록을 담는 메인 컨테이너 */
+#visualization-history {
+    position: relative;
+    max-height: 300px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    border-radius: 8px;
+    padding: 10px;
+    /* 테마에 맞게 스타일 통합 */
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 1px solid #00d5ff5b;
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+}
+
+/* 궤적을 그릴 SVG 컨테이너 */
+#trail-svg-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+}
+
+/* 행성 이동 궤적(path) 공통 스타일 */
+.planet-trail {
+    /* ✅ 궤적을 더 '통통하게' 만들기 위해 두께 증가 */
+    stroke-width: 3px;
+    fill: none;
+    opacity: 0.9;
+    filter: drop-shadow(0 0 3px currentColor);
+    /*transition: stroke-dashoffset 1s linear;*/
+}
+
+/* 교체(swap)되는 행성의 궤적 스타일 (색상은 JS에서 제어) */
+.trail-swap {
+    stroke-dasharray: 5 5; /* 점선 간격 조정 */
+}
+
+/* 직선으로 내려오는 행성의 궤적 스타일 (색상은 JS에서 제어) */
+.trail-straight {
+    stroke-dasharray: none; /* 실선 */
+}
+
+/* 각 정렬 단계를 나타내는 한 줄 */
+.sort-step {
+    display: flex;
+    align-items: center;
+    padding: 15px 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #333;
+}
+
+.step-ghost{
+    opacity: 0;
+}
+
+.sort-step:last-child {
+    border-bottom: none;
+}
+
+/* STEP 라벨 스타일 (테마에 맞게 폰트 및 색상 변경) */
+.step-label {
+    position: relative;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 14px;
+    color: #00d4ff;
+    opacity: 0.5;
+    font-weight: bold;
+}
+
+/* 행성 이미지 기본 스타일 */
+.planet {
+    width: 60px;
+    height: 60px;
+    margin: 0 15px;
+    border-radius: 50%;
+    transition: opacity 0.5s ease, box-shadow 0.3s ease;
+    z-index: 10;
+    position: relative;
+}
+
+/* 정렬 완료된 행성 (box-shadow는 JS에서 행성 고유색으로 직접 제어) */
+.planet-sorted {
+    border-radius: 50%; /* 배경을 원형으로 만듦 */
+    /* 기존에 있던 box-shadow 스타일 등은 그대로 둡니다. */
+}
+
+/* 이동 후 빈 자리를 채울 임시 플레이스홀더 */
+.planet-placeholder {
+    opacity: 0;
+}
+
+/* 이동 경로에 남는 잔상 스타일 */
+.planet-ghost {
+    opacity: 0.2;
+    filter: grayscale(80%);
+}
+
+/* 이동 애니메이션을 수행할 클론 스타일 (box-shadow는 JS에서 고유색으로 직접 제어) */
+.planet-animating {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    z-index: 100;
+    transition: top 1s cubic-bezier(0.65, 0, 0.35, 1), 
+                left 1s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+
+/* ================================================== */
+/* === 컨트롤 버튼 스타일 (제공된 코드로 교체) === */
+/* ================================================== */
+#controls {
+    text-align: center;
+    margin-top: 20px;
+}
+
+#controls button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: transparent;
+    border: 2px solid #00d4ff;
+    color: #00d4ff;
+    font-family: 'Orbitron', sans-serif;
+    transition: all 0.3s ease;
+    border-radius: 4px; /* 약간의 둥근 모서리 추가 */
+}
+
+#controls button:hover, #controls button:focus {
+    background-color: #00d4ff;
+    color: #00001a;
+    box-shadow: 0 0 10px #00d4ff;
+    outline: none;
+}
+
+#controls button:disabled {
+    border-color: #555;
+    color: #555;
+    cursor: not-allowed;
+}
+
+#controls button:disabled:hover {
+    background-color: transparent;
+    color: #555;
+    box-shadow: none;
+}

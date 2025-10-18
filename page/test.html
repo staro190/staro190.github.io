@@ -17,7 +17,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => { // 스크립트가 실행될 약간의 시간을 줍니다.
                 const resultDiv = document.getElementById('result');
-                if (window.katex && window.katex.renderMathInElement) {
+                if (window.katex && window.renderMathInElement) {
                     resultDiv.textContent = '✅ Success! The renderMathInElement function is available.';
                     resultDiv.style.color = 'green';
                 } else {

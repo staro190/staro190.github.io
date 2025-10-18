@@ -1,31 +1,16 @@
-import {initializeBackground} from "/js/common.js";
-// =======================================================================
-// 1. 마크다운 파일을 불러와서 HTML로 변환하고 페이지에 삽입하는 부분
-// =======================================================================
+import { initializeBackground } from "/js/common.js";
+// ✅ 사용할 함수들을 모두 import 합니다.
+import { 
+    setupPlanetSortVisualization, 
+    insertionSortGenerator, 
+    selectionSortGenerator 
+} from "/js/sort_visual.js";
 
-console.log('running')
-
-// /js/blog.js
-
-// ✅ 1. KaTeX가 준비될 때까지 기다리는 Promise 함수를 추가합니다.
-function waitForKatex() {
-    return new Promise((resolve, reject) => {
-        let attempts = 0;
-        const maxAttempts = 100; // 약 5초
-
-        const checkKatex = () => {
-            if (window.katex && window.katex.renderMathInElement) {
-                resolve();
-            } else if (attempts < maxAttempts) {
-                attempts++;
-                setTimeout(checkKatex, 50);
-            } else {
-                reject(new Error("KaTeX auto-render script failed to load."));
-            }
-        };
-        checkKatex();
-    });
-}
+// --- 어떤 마크다운 파일이 어떤 알고리즘 함수를 사용할지 연결하는 지도(Map) ---
+const visualizationMap = {
+    'insertionsort.md': insertionSortGenerator,
+    // 'selectionsort.md': selectionSortGenerator, // 나중에 선택 정렬 페이지를 만들면 주석 해제
+};
 
 async function loadMarkdownPost(markdown) {
     if (!markdown) {
@@ -47,7 +32,7 @@ async function loadMarkdownPost(markdown) {
 
         // 2. ✅ 삽입된 HTML 요소 안에서 KaTeX를 실행하여 수식을 렌더링합니다.
         if (window.katex) {
-            window.katex.renderMathInElement(postContentElement, {
+            window.renderMathInElement(postContentElement, {
                 // 수식을 감싸는 문자를 지정합니다.
                 delimiters: [
                     {left: '$$', right: '$$', display: true},  // 블록 수식 (가운데 정렬)
@@ -56,6 +41,12 @@ async function loadMarkdownPost(markdown) {
                 throwOnError: false // 렌더링 오류가 발생해도 중단하지 않음
             });
             console.log("✅ KaTeX 수식 렌더링이 완료되었습니다!");
+        }
+
+        // ✅ 3. Prism.js 실행하여 모든 코드 블록 하이라이팅
+        if (window.Prism) {
+            window.Prism.highlightAll();
+            console.log("✅ Prism.js 코드 하이라이팅 완료!");
         }
 
     } catch (error) {
@@ -72,15 +63,9 @@ async function loadMarkdownPost(markdown) {
 // 페이지가 로드되면 마크다운을 먼저 불러온 후, 시각화 로직을 설정합니다.
 document.addEventListener('DOMContentLoaded', async () => {
     
-    // ✅ 2. 다른 모든 로직을 실행하기 전에, KaTeX가 준비될 때까지 기다립니다.
-    await waitForKatex();
-    
     const params = new URLSearchParams(window.location.search);
-    console.log(params)
     // 2. 'markdown' 파라미터의 값을 추출합니다.
     const markdownFilePath = params.get('markdown');
-
-    const filePath = "/blog/algorithm/01.intro/intro.md";
 
     // 정규식 설명:
     // /blog/ 다음에 나오는 첫 번째 그룹(.*?)과 두 번째 그룹(.*?)을 찾습니다.
@@ -94,14 +79,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         title = `${match[1]}-${match[2]}`;
     }
 
-    console.log(title);
-
     document.title = title;
-
-    console.log(markdownFilePath)
 
     // 이후 로직은 동일
     await loadMarkdownPost(markdownFilePath);
+    
+    // --- 시각화 함수 조건부 실행 ---
+    const markdownFileName = markdownFilePath.split('/').pop();
+    const algorithmGenerator = visualizationMap[markdownFileName]; // 맵에서 알고리즘 함수를 찾습니다.
+
+    if (algorithmGenerator) {
+        // ✅ 찾은 알고리즘 함수를 시각화 설정 함수에 전달합니다.
+        setupPlanetSortVisualization(algorithmGenerator);
+    }
     
     // 4. 나머지 초기화 함수를 실행합니다.
     initializeBackground();
