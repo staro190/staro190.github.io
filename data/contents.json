@@ -48,8 +48,8 @@
             "href": "/page/blog.html?markdown=/blog/algorithm/01.intro/intro.md"
           },
           {
-            "title": "테스트 정렬",
-            "href": "../blog/algorithm/test/test.html"
+            "title": "삽입 정렬",
+            "href": "/page/blog.html?markdown=/blog/algorithm/02.insertion sort/insertionsort.md"
           }
         ]
       },

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>KaTeX Final Loading Test</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+    <h1>KaTeX Loading Test</h1>
+    <div id="result">Testing...</div>
+
+    <script>
+        // 페이지 로드가 완료된 후, KaTeX 함수가 존재하는지 확인하는 스크립트
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => { // 스크립트가 실행될 약간의 시간을 줍니다.
+                const resultDiv = document.getElementById('result');
+                if (window.katex && window.katex.renderMathInElement) {
+                    resultDiv.textContent = '✅ Success! The renderMathInElement function is available.';
+                    resultDiv.style.color = 'green';
+                } else {
+                    resultDiv.textContent = '❌ Failure! The renderMathInElement function is NOT available.';
+                    resultDiv.style.color = 'red';
+                    console.error("window.katex object state:", window.katex);
+                }
+            }, 500); // 0.5초 후 확인
+        });
+    </script>
+</body>
+</html>

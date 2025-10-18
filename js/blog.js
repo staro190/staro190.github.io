@@ -5,15 +5,58 @@ import {initializeBackground} from "/js/common.js";
 
 console.log('running')
 
+// /js/blog.js
+
+// ✅ 1. KaTeX가 준비될 때까지 기다리는 Promise 함수를 추가합니다.
+function waitForKatex() {
+    return new Promise((resolve, reject) => {
+        let attempts = 0;
+        const maxAttempts = 100; // 약 5초
+
+        const checkKatex = () => {
+            if (window.katex && window.katex.renderMathInElement) {
+                resolve();
+            } else if (attempts < maxAttempts) {
+                attempts++;
+                setTimeout(checkKatex, 50);
+            } else {
+                reject(new Error("KaTeX auto-render script failed to load."));
+            }
+        };
+        checkKatex();
+    });
+}
+
 async function loadMarkdownPost(markdown) {
+    if (!markdown) {
+        // ... (오류 처리)
+        return;
+    }
     try {
-        console.log(markdown)
         const response = await fetch(markdown);
-        if (!response.ok) throw new Error('마크다운 파일을 불러오는 데 실패했습니다.');
+        if (!response.ok) {
+            throw new Error(`마크다운 파일 로드 실패: ${response.statusText}`);
+        }
         
         const markdownText = await response.text();
         const postHTML = marked.parse(markdownText);
-        document.getElementById('post-content').innerHTML = postHTML;
+        const postContentElement = document.getElementById('post-content');
+        
+        // 1. marked로 변환된 HTML을 페이지에 먼저 삽입합니다.
+        postContentElement.innerHTML = postHTML;
+
+        // 2. ✅ 삽입된 HTML 요소 안에서 KaTeX를 실행하여 수식을 렌더링합니다.
+        if (window.katex) {
+            window.katex.renderMathInElement(postContentElement, {
+                // 수식을 감싸는 문자를 지정합니다.
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},  // 블록 수식 (가운데 정렬)
+                    {left: '$', right: '$', display: false}    // 인라인 수식
+                ],
+                throwOnError: false // 렌더링 오류가 발생해도 중단하지 않음
+            });
+            console.log("✅ KaTeX 수식 렌더링이 완료되었습니다!");
+        }
 
     } catch (error) {
         console.error(error);
@@ -21,11 +64,16 @@ async function loadMarkdownPost(markdown) {
     }
 }
 
+// ... (DOMContentLoaded 등 나머지 코드는 기존과 동일)
+
 // =======================================================================
 // 3. 전체 코드 실행
 // =======================================================================
 // 페이지가 로드되면 마크다운을 먼저 불러온 후, 시각화 로직을 설정합니다.
 document.addEventListener('DOMContentLoaded', async () => {
+    
+    // ✅ 2. 다른 모든 로직을 실행하기 전에, KaTeX가 준비될 때까지 기다립니다.
+    await waitForKatex();
     
     const params = new URLSearchParams(window.location.search);
     console.log(params)
