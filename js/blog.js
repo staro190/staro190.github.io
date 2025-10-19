@@ -1,14 +1,19 @@
 import { initializeBackground } from "/js/common.js";
+import { initializeExplorer } from "./explorer.js";
+
 // ✅ 사용할 함수들을 모두 import 합니다.
 import { 
     setupPlanetSortVisualization, 
     insertionSortGenerator, 
+    mergeSortGenerator, 
+    heapSortGenerator, 
     selectionSortGenerator 
 } from "/js/sort_visual.js";
 
 // --- 어떤 마크다운 파일이 어떤 알고리즘 함수를 사용할지 연결하는 지도(Map) ---
 const visualizationMap = {
     'insertionsort.md': insertionSortGenerator,
+    'mergesort.md': mergeSortGenerator,
     // 'selectionsort.md': selectionSortGenerator, // 나중에 선택 정렬 페이지를 만들면 주석 해제
 };
 
@@ -92,6 +97,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         // ✅ 찾은 알고리즘 함수를 시각화 설정 함수에 전달합니다.
         setupPlanetSortVisualization(algorithmGenerator);
     }
+
+    
+    let selectedIndex = 0;
+
+    // 1. 익스플로러 초기화
+    initializeExplorer({
+        onLinkClick: (event, index) => {
+            event.preventDefault();
+            selectedIndex = index;
+            // 💡 링크를 클릭했으므로, 행성 UI와 익스플로러 활성 상태 모두 업데이트
+            updatePlanetSelectionUI({ updateLinks: true }); 
+        }
+    });
     
     // 4. 나머지 초기화 함수를 실행합니다.
     initializeBackground();

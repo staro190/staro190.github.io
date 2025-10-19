@@ -1,51 +1,42 @@
-import {initializeBackground} from "./common.js";
+import { initializeBackground } from "./common.js";
+import { initializeExplorer } from "./explorer.js";
 
-// --- 💡 추가된 부분 1: 공유 변수 선언 ---
-// 여러 함수에서 함께 사용해야 할 변수들을 DOMContentLoaded 밖으로 빼거나, 상위 스코프에 둡니다.
-// 여기서는 간결함을 위해 DOMContentLoaded 내 최상단에 배치합니다.
 console.log("✅ voyage.js 파일이 성공적으로 로드 및 실행되었습니다!");
+
 document.addEventListener('DOMContentLoaded', () => {
-    // --- 💡 추가된 부분: 행성 데이터와 선택 인덱스를 여러 함수가 공유할 수 있도록 이곳으로 이동 ---
     let planets = [];
     let selectedIndex = 0;
-    console.log("✅ addEventListener 함수가 성공적으로 로드 및 실행되었습니다!");
 
-    // 1. 공유 익스플로러를 불러오고, 기능(토글, 활성 링크)을 설정
-    loadExplorer().then(() => {
-        setupExplorerToggle();
-        highlightCurrentPageLink();
-        // --- 💡 추가된 부분: 탐색기 링크에 클릭 이벤트 추가 ---
-        if (document.getElementById('planet-image')) {
-            setupExplorerClickEvents();
+    // 1. 익스플로러 초기화
+    initializeExplorer({
+        onLinkClick: (event, index) => {
+            event.preventDefault();
+            selectedIndex = index;
+            // 💡 링크를 클릭했으므로, 행성 UI와 익스플로러 활성 상태 모두 업데이트
+            updatePlanetSelectionUI({ updateLinks: true }); 
         }
     });
 
-    // 2. index.html에만 있는 행성 선택 인터랙션 기능을 실행
+    // 2. voyage.html 고유의 행성 선택 인터랙션 기능 실행
     if (document.getElementById('planet-image')) {
         initializePlanetSelector();
     }
     
-    // 3. 배경 별 애니메이션은 모든 페이지에서 실행
+    // 3. 모든 페이지 공통 배경 애니메이션 실행
     initializeBackground();
-
-    // --- 💡 추가된 부분: 탐색기 링크 클릭 이벤트를 설정하는 함수 ---
-    function setupExplorerClickEvents() {
-        const links = document.querySelectorAll('#planet-list a');
-        links.forEach((link, index) => {
-            link.addEventListener('click', (e) => {
-                // index.html에서는 행성만 바꾸고 페이지 이동은 막음
-                e.preventDefault();
-                selectedIndex = index;
-                // 행성 UI를 업데이트하는 함수 호출
-                updatePlanetSelectionUI();
-            });
-        });
-    }
     
-    // --- 💡 추가된 부분: 행성 UI 업데이트 로직을 별도 함수로 분리 ---
-    // initializePlanetSelector 내부와 외부에서 모두 호출하기 위함입니다.
-    function updatePlanetSelectionUI(isInitial = false) {
+    /**
+     * 행성 UI를 업데이트하는 함수.
+     * @param {object} [options={}] - 업데이트 옵션
+     * @param {boolean} [options.isInitial=false] - 처음 로드 시인지 여부
+     * @param {boolean} [options.updateLinks=true] - 익스플로러 링크의 활성 상태를 업데이트할지 여부
+     */
+    function updatePlanetSelectionUI(options = {}) {
+        // 💡 옵션 기본값 설정
+        const { isInitial = false, updateLinks = true } = options;
+
         if (planets.length === 0) return;
+        
         const selectedPlanet = planets[selectedIndex];
         
         const planetImageEl = document.getElementById('planet-image');
@@ -59,26 +50,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         setTimeout(() => {
-            planetImageEl.src = selectedPlanet.imgSrc; // imgSrc 필드가 JSON에 있어야 합니다.
+            planetImageEl.src = selectedPlanet.imgSrc;
             planetNameEl.textContent = selectedPlanet.name;
             warpButton.onclick = () => { window.location.href = selectedPlanet.link; };
             planetImageEl.style.opacity = 1;
         }, isInitial ? 0 : 300);
 
-        // --- 💡 추가된 부분: 탐색기 링크 하이라이트 ---
-        const links = document.querySelectorAll('#planet-list a');
-        links.forEach((link, index) => {
-            link.classList.toggle('active', index === selectedIndex);
-        });
+        // 💡 updateLinks가 true일 때만 익스플로러의 활성 링크를 업데이트
+        if (updateLinks) {
+            const links = document.querySelectorAll('#planet-list a');
+            links.forEach((link, index) => {
+                link.classList.toggle('active', index === selectedIndex);
+            });
+        }
     }
 
-    // 행성 선택 관련 기능
+    /**
+     * 행성 데이터를 불러오고 마우스 휠 이벤트를 설정하는 함수
+     */
     function initializePlanetSelector() {
-        fetch('../data/planets.json') // 기존처럼 planets.json을 사용
+        fetch('../data/planets.json')
             .then(response => response.json())
             .then(data => {
-                planets = data; // 공유 변수에 데이터 할당
-                updatePlanetSelectionUI(true); 
+                planets = data;
+                // 💡 처음 로드 시에는 행성 UI와 익스플로러 활성 상태 모두 초기화
+                updatePlanetSelectionUI({ isInitial: true, updateLinks: true });
             });
 
         window.addEventListener('wheel', (e) => {
@@ -88,63 +84,8 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 selectedIndex = (selectedIndex - 1 + planets.length) % planets.length;
             }
-            updatePlanetSelectionUI();
+            // 💡 휠 스크롤 시에는 행성 UI만 업데이트하고, 익스플로러 링크는 업데이트하지 않음
+            updatePlanetSelectionUI({ updateLinks: false });
         }, { passive: false });
     }
 });
-
-
-// =======================================================================
-// 아래 함수들은 기존 코드와 동일합니다. (변경 없음)
-// =======================================================================
-
-// 공유 익스플로러(explorer.html)를 불러와 페이지에 삽입하는 함수
-async function loadExplorer() {
-    const placeholder = document.getElementById('explorer-placeholder');
-    if (!placeholder) return;
-
-    try {
-        const response = await fetch('../page/explorer.html');
-        const explorerHTML = await response.text();
-        placeholder.innerHTML = explorerHTML;
-        console.log("✅ placeholder :", explorerHTML);
-
-        const treeScript = document.createElement('script');
-        
-        // tree.js의 경로는 voyage.html을 기준으로 합니다.
-        treeScript.src = '../js/tree.js'; 
-        treeScript.defer = true; // HTML 파싱을 막지 않도록 defer 속성 추가
-        
-        // body의 맨 끝에 스크립트 태그를 추가하여 실행시킵니다.
-        document.body.appendChild(treeScript);
-        console.log("✅ tree.js :", treeScript.src);
-    } catch (error) {
-        console.error('Explorer를 불러오는 데 실패했습니다:', error);
-    }
-}
-
-// 익스플로러 토글 버튼 기능 설정
-function setupExplorerToggle() {
-    const panel = document.getElementById('explorer-panel');
-    const toggleButton = document.getElementById('explorer-toggle');
-    if (!panel || !toggleButton) return;
-
-    toggleButton.addEventListener('click', () => {
-        panel.classList.toggle('collapsed');
-        toggleButton.classList.toggle('collapsed');
-    });
-}
-
-// 현재 페이지 URL을 기반으로 익스플로러의 해당 링크를 활성화
-function highlightCurrentPageLink() {
-    const links = document.querySelectorAll('#planet-list a');
-    const currentPagePath = window.location.pathname;
-
-    links.forEach(link => {
-        const linkPath = new URL(link.href).pathname;
-        if (linkPath === currentPagePath || (currentPagePath.endsWith('/') && linkPath.endsWith('index.html'))) {
-            link.classList.add('active');
-        }
-    });
-}
-

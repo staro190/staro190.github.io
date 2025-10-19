@@ -50,6 +50,10 @@
           {
             "title": "삽입 정렬",
             "href": "/page/blog.html?markdown=/blog/algorithm/02.insertion sort/insertionsort.md"
+          },
+          {
+            "title": "병합 정렬",
+            "href": "/page/blog.html?markdown=/blog/algorithm/03.merge sort/mergesort.md"
           }
         ]
       },
