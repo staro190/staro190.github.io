@@ -17,7 +17,7 @@
   {
     "name": "Algorithm",
     "imgSrc": "../img/planet4.png",
-    "link": "algo_main.html"
+    "link": "/page/blog.html?post=/blog/algorithm/01.intro"
   },
   {
     "name": "Network",

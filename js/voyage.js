@@ -8,14 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedIndex = 0;
 
     // 1. 익스플로러 초기화
-    initializeExplorer({
-        onLinkClick: (event, index) => {
-            event.preventDefault();
-            selectedIndex = index;
-            // 💡 링크를 클릭했으므로, 행성 UI와 익스플로러 활성 상태 모두 업데이트
-            updatePlanetSelectionUI({ updateLinks: true }); 
-        }
-    });
+    initializeExplorer();
 
     // 2. voyage.html 고유의 행성 선택 인터랙션 기능 실행
     if (document.getElementById('planet-image')) {

@@ -64,7 +64,7 @@
 /* 새로 추가된 span 태그에 대한 스타일 */
 #explorer-toggle span {
     display: inline-block; /* transform을 적용하기 위해 필요 */
-    transition: transform 0.4s ease-in-out; /* 애니메이션을 span으로 이동 */
+    transition: transform 0.1s ease-in-out; /* 애니메이션을 span으로 이동 */
 }
 
 /* 접혔을 때 span(문자)만 뒤집도록 변경 */
@@ -116,4 +116,87 @@
     font-weight: bold;
     box-shadow: 0 0 15px #00d4ff;
     border-color: #00d4ff;
+}
+
+/* ============================================= */
+/* ✨ 개선된 트리 스타일 및 애니메이션 ✨ */
+/* ============================================= */
+
+/* 1. 카테고리(중분류) 제목 스타일 */
+.tree li > span {
+    display: flex;
+    align-items: center;
+    padding: 12px 10px; /* 충분한 여백 확보 */
+    margin: 4px 0; /* 카테고리 간 간격 */
+    font-weight: 600; /* 살짝 굵게 */
+    color: #a0e9ff; /* 부드러운 하늘색 */
+    border-radius: 6px; /* 부드러운 모서리 */
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.2s ease, color 0.2s ease; /* 부드러운 전환 효과 */
+}
+
+/* 카테고리 제목에 마우스를 올렸을 때 효과 */
+.tree li > span:hover {
+    background-color: rgba(0, 212, 255, 0.15); /* 은은한 배경색 */
+    color: #ffffff; /* 더 밝은 텍스트 색상 */
+}
+
+
+/* 2. 카테고리 아이콘(화살표) 스타일 */
+.tree li > span::before {
+    content: '▼';
+    margin-right: 12px;
+    font-size: 0.8em;
+    transition: transform 0.3s ease-in-out; /* 아이콘 회전 애니메이션 */
+}
+
+/* 닫힌 상태(.collapsed)일 때 아이콘 회전 */
+.tree li.collapsed > span::before {
+    transform: rotate(-90deg);
+}
+
+
+/* 3. 하위 메뉴(ul) 스타일 및 애니메이션 */
+.tree li > ul {
+    list-style: none;
+    padding-left: 24px; /* 들여쓰기 증가 */
+    margin: 0;
+    overflow: hidden; /* [핵심] 이 속성이 없으면 애니메이션이 어색해집니다 */
+
+    /* [애니메이션] 열릴 때의 최종 상태 */
+    max-height: 500px; /* 메뉴가 열렸을 때의 최대 높이 (내용물보다 충분히 크게) */
+    opacity: 1;
+    transition: 
+        max-height 0.4s cubic-bezier(0.25, 1, 0.5, 1), /* 펼쳐지는 애니메이션 */
+        opacity 0.3s ease-in-out; /* 나타나는 애니메이션 */
+}
+
+/* [애니메이션] 닫혔을 때의 상태 */
+.tree li.collapsed > ul {
+    max-height: 0; /* 높이를 0으로 만들어 슬라이드 업 효과 */
+    opacity: 0;
+    margin-top: 0;
+}
+
+
+/* 4. 하위 메뉴의 각 링크(a) 아이템 스타일 */
+.tree li ul a {
+    padding: 10px 15px;
+    padding-left: 10px;
+    font-size: 1em; /* 카테고리보다 작은 폰트 */
+    color: #d0d0d0;
+}
+
+.tree li ul a:hover {
+    color: #ffffff;
+    background: rgba(0, 212, 255, 0.1); /* 카테고리 호버보다 약하게 */
+}
+
+/* 현재 활성화된 페이지 링크 스타일 */
+.tree li a.active {
+    color: #000;
+    background: #00d4ff;
+    font-weight: bold;
+    box-shadow: 0 0 15px #00d4ff;
 }

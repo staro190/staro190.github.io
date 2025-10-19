@@ -1,0 +1,5 @@
+{
+  "title": "힙 정렬 (Heap Sort)",
+  "markdownFile": "heapsort.md",
+  "visualizationScript": "heapsort.js"
+}

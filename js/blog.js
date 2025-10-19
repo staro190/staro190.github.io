@@ -1,20 +1,20 @@
 import { initializeBackground } from "/js/common.js";
-import { initializeExplorer } from "./explorer.js";
+import { initializeExplorer } from "/js/explorer.js";
+import { insertionSortGenerator } from "/blog/algorithm/02.sorting/02_02.insertion/insertionsort.js";
+import { mergeSortGenerator } from "/blog/algorithm/02.sorting/02_03.merge/mergesort.js";
+import { heapSortGenerator } from "/blog/algorithm/02.sorting/02_04.heap/heapsort.js";
+import { selectionSortGenerator } from "/blog/algorithm/02.sorting/02_10.selection/selectionsort.js";
+import { bubbleSortGenerator } from "/blog/algorithm/02.sorting/02_11.bubble/bubblesort.js";
+import { setupPlanetSortVisualization} from "/js/sort_visual.js";
 
-// ✅ 사용할 함수들을 모두 import 합니다.
-import { 
-    setupPlanetSortVisualization, 
-    insertionSortGenerator, 
-    mergeSortGenerator, 
-    heapSortGenerator, 
-    selectionSortGenerator 
-} from "/js/sort_visual.js";
 
 // --- 어떤 마크다운 파일이 어떤 알고리즘 함수를 사용할지 연결하는 지도(Map) ---
 const visualizationMap = {
     'insertionsort.md': insertionSortGenerator,
     'mergesort.md': mergeSortGenerator,
-    // 'selectionsort.md': selectionSortGenerator, // 나중에 선택 정렬 페이지를 만들면 주석 해제
+    'heapsort.md': heapSortGenerator,
+    'selectionsort.md': selectionSortGenerator,
+    'bubblesort.md': bubbleSortGenerator
 };
 
 async function loadMarkdownPost(markdown) {
@@ -68,50 +68,51 @@ async function loadMarkdownPost(markdown) {
 // 페이지가 로드되면 마크다운을 먼저 불러온 후, 시각화 로직을 설정합니다.
 document.addEventListener('DOMContentLoaded', async () => {
     
-    const params = new URLSearchParams(window.location.search);
-    // 2. 'markdown' 파라미터의 값을 추출합니다.
-    const markdownFilePath = params.get('markdown');
-
-    // 정규식 설명:
-    // /blog/ 다음에 나오는 첫 번째 그룹(.*?)과 두 번째 그룹(.*?)을 찾습니다.
-    const regex = /\/blog\/(.*?)\/(.*?)\//;
-
-    const match = markdownFilePath.match(regex);
-
-    let title = "";
-    if (match && match.length > 2) {
-        // 찾은 두 그룹(match[1], match[2])을 '-'로 연결합니다.
-        title = `${match[1]}-${match[2]}`;
-    }
-
-    document.title = title;
-
-    // 이후 로직은 동일
-    await loadMarkdownPost(markdownFilePath);
-    
-    // --- 시각화 함수 조건부 실행 ---
-    const markdownFileName = markdownFilePath.split('/').pop();
-    const algorithmGenerator = visualizationMap[markdownFileName]; // 맵에서 알고리즘 함수를 찾습니다.
-
-    if (algorithmGenerator) {
-        // ✅ 찾은 알고리즘 함수를 시각화 설정 함수에 전달합니다.
-        setupPlanetSortVisualization(algorithmGenerator);
-    }
-
-    
-    let selectedIndex = 0;
-
-    // 1. 익스플로러 초기화
-    initializeExplorer({
-        onLinkClick: (event, index) => {
-            event.preventDefault();
-            selectedIndex = index;
-            // 💡 링크를 클릭했으므로, 행성 UI와 익스플로러 활성 상태 모두 업데이트
-            updatePlanetSelectionUI({ updateLinks: true }); 
-        }
-    });
-    
-    // 4. 나머지 초기화 함수를 실행합니다.
+    initializeExplorer();
     initializeBackground();
+
+    // 1. URL에서 '?post=폴더명' 형식의 파라미터를 읽습니다.
+    const params = new URLSearchParams(window.location.search);
+    const postFolder = params.get('post');
+
+    if (!postFolder) {
+        console.error("URL에 '?post=' 파라미터가 없습니다.");
+        document.getElementById('post-content').innerText = '포스트를 지정해주세요.';
+        return;
+    }
+
+    // 2. 포스트 폴더 경로를 기반으로 meta.json 파일의 경로를 만듭니다.
+    //    (실제 프로젝트의 폴더 구조에 맞게 경로를 조정해야 할 수 있습니다.)
+    const metaPath = `${postFolder}/meta.json`;
+
+    console.log(metaPath)
+    try {
+        // 3. meta.json 파일을 fetch 합니다.
+        const metaResponse = await fetch(metaPath);
+        if (!metaResponse.ok) throw new Error(`${metaPath} 파일을 찾을 수 없습니다.`);
+        const meta = await metaResponse.json();
+
+        // 4. meta 정보로 페이지 제목을 설정합니다.
+        document.title = meta.title;
+
+        // 5. meta 정보에 있는 마크다운 파일을 로드합니다.
+        const markdownPath = `${postFolder}/${meta.markdownFile}`;
+        await loadMarkdownPost(markdownPath);
+
+        // 6. meta 정보에 시각화 스크립트 정보가 있다면 동적으로 import 합니다.
+        if (meta.visualizationScript) {
+            const modulePath = `${postFolder}/${meta.visualizationScript}`;
+            const module = await import(modulePath);
+            const algorithmGenerator = Object.values(module)[0];
+
+            if (algorithmGenerator) {
+                setupPlanetSortVisualization(algorithmGenerator);
+            }
+        }
+
+    } catch (error) {
+        console.error("포스트를 불러오는 데 실패했습니다:", error);
+        document.getElementById('post-content').innerText = '포스트를 불러오는 중 오류가 발생했습니다.';
+    }
     console.log("✅ DOMContentLoaded 이벤트 리스너가 성공적으로 실행되었습니다!");
 });

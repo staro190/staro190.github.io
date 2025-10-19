@@ -42,3 +42,6 @@ def insertion_sort(arr):
 
 - **Stable**          
 앞에서 부터 순차적으로 진행하고 같은 경우 다음 순번으로 삽입한다면 Stable 합니다.
+
+- **In-place**          
+입력 데이터 공간 자체에서 Swap을 통해 정렬이 가능하므로 In-place하며, 이 경우 공간 복잡도 1 입니다.

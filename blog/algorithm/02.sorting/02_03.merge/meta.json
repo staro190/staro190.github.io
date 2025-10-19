@@ -1,0 +1,5 @@
+{
+  "title": "병합 정렬 (Merge Sort)",
+  "markdownFile": "mergesort.md",
+  "visualizationScript": "mergesort.js"
+}

@@ -24,7 +24,7 @@ body {
     height: 250px;
     object-fit: contain;
     z-index: 10;
-    transition: opacity 0.3s ease-in-out;
+    transition: opacity 0.2s ease-in-out;
 }
 
 .hud-container {
