@@ -1,35 +1,34 @@
 import { initializeBackground } from "/js/common.js";
 import { initializeExplorer } from "/js/explorer.js";
-import { insertionSortGenerator } from "/blog/algorithm/02.sorting/02_02.insertion/insertionsort.js";
-import { mergeSortGenerator } from "/blog/algorithm/02.sorting/02_03.merge/mergesort.js";
-import { heapSortGenerator } from "/blog/algorithm/02.sorting/02_04.heap/heapsort.js";
-import { selectionSortGenerator } from "/blog/algorithm/02.sorting/02_10.selection/selectionsort.js";
-import { bubbleSortGenerator } from "/blog/algorithm/02.sorting/02_11.bubble/bubblesort.js";
 import { setupPlanetSortVisualization} from "/js/sort_visual.js";
 
-
-// --- 어떤 마크다운 파일이 어떤 알고리즘 함수를 사용할지 연결하는 지도(Map) ---
-const visualizationMap = {
-    'insertionsort.md': insertionSortGenerator,
-    'mergesort.md': mergeSortGenerator,
-    'heapsort.md': heapSortGenerator,
-    'selectionsort.md': selectionSortGenerator,
-    'bubblesort.md': bubbleSortGenerator
-};
-
-async function loadMarkdownPost(markdown) {
-    if (!markdown) {
+async function loadMarkdownPost(markdownPath) {
+    if (!markdownPath) {
         // ... (오류 처리)
         return;
     }
     try {
-        const response = await fetch(markdown);
+        const response = await fetch(markdownPath);
         if (!response.ok) {
             throw new Error(`마크다운 파일 로드 실패: ${response.statusText}`);
         }
         
         const markdownText = await response.text();
-        const postHTML = marked.parse(markdownText);
+
+        // ✨ 1. 마크다운 파일의 디렉토리 경로를 추출합니다.
+        // 예: /blog/post/a/a.md -> /blog/post/a/
+        const postpath = markdownPath.substring(0, markdownPath.lastIndexOf('/')+1);
+
+        // ✨ 2. [핵심] 정규식을 사용해 마크다운 텍스트 안의 모든 상대 이미지 경로를 절대 경로로 직접 변환합니다.
+        // http, https, / 로 시작하지 않는 이미지 경로만 찾습니다.
+        const relativeImagePathRegex = /!\[(.*?)\]\((?!https?:\/\/|\/)(.*?)\)/g;
+        const processedMarkdown = markdownText.replace(
+            relativeImagePathRegex,
+            `![$1](${postpath}$2)`
+        );
+        
+        // ✨ 2. marked.parse에 baseUrl 옵션을 추가하여 이미지의 기준 경로를 알려줍니다.
+        const postHTML = marked.parse(processedMarkdown, { baseUrl: postpath });
         const postContentElement = document.getElementById('post-content');
         
         // 1. marked로 변환된 HTML을 페이지에 먼저 삽입합니다.
@@ -85,7 +84,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     //    (실제 프로젝트의 폴더 구조에 맞게 경로를 조정해야 할 수 있습니다.)
     const metaPath = `${postFolder}/meta.json`;
 
-    console.log(metaPath)
     try {
         // 3. meta.json 파일을 fetch 합니다.
         const metaResponse = await fetch(metaPath);
