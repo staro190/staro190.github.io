@@ -5,6 +5,11 @@
 /* === 행성 정렬 시각화 스타일 (수정 및 통합된 부분) === */
 /* ================================================== */
 
+:root {
+    --planet-base-size: 60px; /* ✨ 바로 이 값입니다! */
+    --planet-size-multiplier: 1; /* 슬라이더의 기본 배율(100%) */
+}
+
 /* 시각화 기록을 담는 메인 컨테이너 */
 #visualization-history {
     position: relative;
@@ -70,21 +75,32 @@
 
 /* STEP 라벨 스타일 (테마에 맞게 폰트 및 색상 변경) */
 .step-label {
-    position: relative;
-    left: 10px;
-    top: 50%;
-    transform: translateY(-50%);
+    /* ✨ [수정] position, left, top, transform 속성 모두 제거! */
+    
+    /* ✨ [추가] 모든 STEP 라벨이 동일한 너비를 갖도록 고정합니다. */
+    flex-shrink: 0; /* 컨테이너가 줄어들어도 레이블 너비는 줄어들지 않음 */
+    width: 90px;    /* 너비를 90px로 고정 */
+
+    /* ✨ [추가] 레이블과 첫 행성 사이의 간격을 줍니다. */
+    padding-right: 20px;
+    box-sizing: border-box; /* 패딩이 너비에 포함되도록 설정 */
+
+    /* 폰트 및 색상 스타일은 그대로 유지 */
     font-family: 'Orbitron', sans-serif;
     font-size: 14px;
     color: #00d4ff;
-    opacity: 0.5;
+    opacity: 0.7;
     font-weight: bold;
+    text-align: center; /* 텍스트를 고정된 너비 안에서 가운데 정렬 */
 }
 
 /* 행성 이미지 기본 스타일 */
 .planet {
-    width: 60px;
-    height: 60px;
+    --planet-specific-scale: 1;
+    width: calc(var(--planet-base-size) * var(--planet-size-multiplier) * var(--planet-specific-scale));
+    height: calc(var(--planet-base-size) * var(--planet-size-multiplier) * var(--planet-specific-scale));
+    /*width: 60px;*/
+    /*height: 60px;*/
     margin: 0 15px;
     border-radius: 50%;
     transition: opacity 0.5s ease, box-shadow 0.3s ease;
@@ -111,6 +127,9 @@
 
 /* 이동 애니메이션을 수행할 클론 스타일 (box-shadow는 JS에서 고유색으로 직접 제어) */
 .planet-animating {
+    --planet-specific-scale: 1;
+    width: calc(var(--planet-base-size) * var(--planet-size-multiplier) * var(--planet-specific-scale));
+    height: calc(var(--planet-base-size) * var(--planet-size-multiplier) * var(--planet-specific-scale));
     position: absolute;
     width: 60px;
     height: 60px;

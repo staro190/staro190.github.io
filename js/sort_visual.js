@@ -26,14 +26,14 @@ export function setupPlanetSortVisualization(algorithmGenerator) {
     const startBtn = document.getElementById('start-sort-btn');
     const animationSpeed = 1000;
     const planetsData = [
-        { name: '수성', order: 0, img: '../img/planets/mercury.png', color: '#9E9E9E' },
-        { name: '금성', order: 1, img: '../img/planets/venus.png',   color: '#FF7F00' },
-        { name: '지구', order: 2, img: '../img/planets/earth.png',   color: '#87BC49' },
-        { name: '화성', order: 3, img: '../img/planets/mars.png',     color: '#E57373' },
-        { name: '목성', order: 4, img: '../img/planets/jupiter.png', color: '#964B00' },
-        { name: '토성', order: 5, img: '../img/planets/saturn.png',   color: '#FFF176' },
-        { name: '천왕성', order: 6, img: '../img/planets/uranus.png', color: '#4DD0E1' },
-        { name: '해왕성', order: 7, img: '../img/planets/neptune.png', color: '#5C6BC0' }
+        { name: '수성', order: 0, img: '../img/planets/mercury.png', color: '#9E9E9E', scale: 1.0 },
+        { name: '금성', order: 1, img: '../img/planets/venus.png',   color: '#FF7F00', scale: 1.0 },
+        { name: '지구', order: 2, img: '../img/planets/earth.png',   color: '#87BC49', scale: 1.0 },
+        { name: '화성', order: 3, img: '../img/planets/mars.png',     color: '#E57373', scale: 1.0 },
+        { name: '목성', order: 4, img: '../img/planets/jupiter.png', color: '#964B00', scale: 1.0 },
+        { name: '토성', order: 5, img: '../img/planets/saturn.png',   color: '#FFF176', scale: 1.0 },
+        { name: '천왕성', order: 6, img: '../img/planets/uranus.png', color: '#4DD0E1', scale: 1.0 },
+        { name: '해왕성', order: 7, img: '../img/planets/neptune.png', color: '#5C6BC0', scale: 1.0 }
     ];
     let currentPlanetState = [];
     
@@ -59,9 +59,12 @@ export function setupPlanetSortVisualization(algorithmGenerator) {
             planetImg.alt = planet.name;
             planetImg.classList.add('planet');
             planetImg.dataset.order = planet.order;
+
+            planetImg.style.setProperty('--planet-specific-scale', planet.scale || 1);
+
             if (index <= sortedUntilIndex) {
                 planetImg.classList.add('planet-sorted');
-                planetImg.style.boxShadow = `0 0 15px 3px ${planet.color}`;
+                planetImg.style.filter = `drop-shadow(0 0 15px ${planet.color})`;
             }
             if (invisibleIndices.includes(index)) {
                 planetImg.classList.add('planet-placeholder');
@@ -104,76 +107,75 @@ export function setupPlanetSortVisualization(algorithmGenerator) {
         historyContainer.appendChild(createStepRow(toState, sortedUntilIndex, stepCounter, []));
         historyContainer.scrollTop = historyContainer.scrollHeight;
         svgContainer.style.height = `${historyContainer.scrollHeight}px`;
+
         const allSteps = historyContainer.querySelectorAll('.sort-step');
         const prevStepDiv = allSteps[allSteps.length - 2];
         const nextStep = allSteps[allSteps.length - 1];
+        
         nextStep.classList.add('step-ghost');
-        if (!prevStepDiv) {
-            if (nextStep) {
-                const initialPlanets = nextStep.querySelectorAll('.planet');
-                initialPlanets.forEach(p => p.classList.remove('placeholder'));
-            }
-            return;
-        }
+        if (!prevStepDiv) return;
+
         const prevPlanets = prevStepDiv.querySelectorAll('.planet');
         const nextPlanets = nextStep.querySelectorAll('.planet');
+
+        // ✨ --- [수정된 좌표 계산 로직 시작] --- ✨
+
+        // 1. 애니메이션의 기준이 될 컨테이너의 좌표와 스크롤 위치를 가져옵니다.
         const containerRect = historyContainer.getBoundingClientRect();
-        const computedStyle = window.getComputedStyle(historyContainer);
-        const borderLeft = parseFloat(computedStyle.borderLeftWidth);
-        const borderTop = parseFloat(computedStyle.borderTopWidth);
-        let horizontalOffset = 0;
-        const firstStepElement = document.querySelector('.planet');
-        if (firstStepElement) {
-            const styles = window.getComputedStyle(firstStepElement);
-            horizontalOffset = parseFloat(styles.marginLeft); 
-        }
-        const movingIndices = [];
-        for (let i = 0; i < fromState.length; i++) {
-            if (fromState[i].order !== toState[i].order) { movingIndices.push(i); }
-        }
+        const scrollTop = historyContainer.scrollTop;
+
         const animatingClones = [];
-        const animatingSourcePlanets = [];
+        
         for (let i = 0; i < fromState.length; i++) {
             const startPlanetData = fromState[i];
             const startPlanetDOM = prevPlanets[i];
             const targetIndexInNextState = toState.findIndex(p => p.order === startPlanetData.order);
             const endPlanetDOM = nextPlanets[targetIndexInNextState];
+
             if (!startPlanetDOM || !endPlanetDOM) continue;
+
             const startRect = startPlanetDOM.getBoundingClientRect();
             const endRect = endPlanetDOM.getBoundingClientRect();
+            
             if (startRect.width === 0 || endRect.width === 0) continue;
-            const scrollTop = historyContainer.scrollTop;
-            const startX = startRect.left - containerRect.left - borderLeft + startRect.width / 2;
-            const startY = startRect.top - containerRect.top - borderTop + startRect.height / 2 + scrollTop;
-            const endX = endRect.left - containerRect.left - borderLeft + endRect.width / 2;
-            const endY = endRect.top - containerRect.top - borderTop + endRect.height / 2 + scrollTop;
-            const color = startPlanetData.color;
-            const pathData = `M ${startX} ${startY} L ${endX} ${endY}`;
-            const trailClass = (movingIndices.includes(i) || toState.findIndex(p => p.order === fromState[i].order) !== i) ? 'trail-swap' : 'trail-straight';
-            drawTrail(pathData, color, trailClass);
-            const clone = startPlanetDOM.cloneNode();
+
+            // 2. 뷰포트 기준 좌표(getBoundingClientRect)에서 컨테이너의 위치를 빼서
+            //    컨테이너 내부의 상대적인 top, left 위치를 정확하게 계산합니다.
+            const startX = startRect.left - containerRect.left -1;
+            const startY = startRect.top + scrollTop - containerRect.top -34;
+            const endX = endRect.left - containerRect.left - 1;
+            const endY = endRect.top + scrollTop - containerRect.top - 34;
+
+            // 3. 복제된 행성의 위치를 계산된 상대 위치로 설정합니다.
+            const clone = startPlanetDOM.cloneNode(true);
             clone.classList.add('planet-animating');
-            clone.style.top = `${startY - borderTop - startRect.height / 2}px`;
-            clone.style.left = `${startX - horizontalOffset - startRect.width / 2}px`;
+            clone.style.left = `${startX}px`;
+            clone.style.top = `${startY}px`;
             historyContainer.appendChild(clone);
-            animatingClones.push({ 
-                clone, 
-                endTop: endY - endRect.height / 2,
-                endLeft: endX - horizontalOffset- endRect.width / 2,
-            });
-            animatingSourcePlanets.push(startPlanetDOM);
+            
+            animatingClones.push({ clone, endTop: endY, endLeft: endX });
+
+            // 4. 이동 궤적(SVG path)도 행성의 '중심점'을 기준으로 새로 계산합니다.
+            const pathData = `M ${startX + startRect.width / 2} ${startY + startRect.height / 2 + 34} L ${endX + endRect.width / 2} ${endY + endRect.height / 2 + 34}`;
+            drawTrail(pathData, startPlanetData.color, 'trail-swap');
         }
-        animatingSourcePlanets.forEach(p => p.classList.add('planet-ghost'));
+        
+        // ✨ --- [수정된 좌표 계산 로직 끝] --- ✨
+
+        prevPlanets.forEach(p => p.classList.add('planet-ghost'));
+        
         await sleep(50);
+
         animatingClones.forEach(({ clone, endTop, endLeft }) => {
             clone.style.top = `${endTop}px`;
             clone.style.left = `${endLeft}px`;
         });
+        
         await sleep(animationSpeed);
+        
         animatingClones.forEach(({ clone }) => clone.remove());
-        nextPlanets.forEach(planet => planet.classList.remove('planet-placeholder'));
         nextStep.classList.remove('step-ghost');
-        nextStep.classList.add('step-ghosted');
+        //prevPlanets.forEach(p => p.classList.remove('planet-ghost'));
     }
 
     /**
