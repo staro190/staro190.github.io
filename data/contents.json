@@ -74,6 +74,10 @@
               {
                 "title": "계수 정렬",
                 "href": "/page/blog.html?post=/blog/algorithm/02.sorting/02_06.counting"
+              },
+              {
+                "title": "기수 정렬",
+                "href": "/page/blog.html?post=/blog/algorithm/02.sorting/02_07.radix"
               }
             ]
           }

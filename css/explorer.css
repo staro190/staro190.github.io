@@ -1,10 +1,63 @@
+/* Google Fonts에서 폰트 가져오기 */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=Orbitron:wght@700&display=swap');
+
+/* ============================================= */
+/* ✨ 1. 전체 페이지 및 블로그 본문 스타일 ✨ */
+/* ============================================= */
+
 html, body {
     height: 100%;
     margin: 0;
     padding: 0;
 }
 
-/* ===== ✨ 익스플로러 패널 스타일 (수정) ✨ ===== */
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    line-height: 1.8;
+    color: #ffffff; 
+    background-color: #000000;
+}
+
+#bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #000;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+main#post-content {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #000000b2;
+    padding: 0px 0px;
+    border-radius: 8px;
+    border: 1px solid #00d5ff5b;
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+}
+
+main#post-content h1, main#post-content h2 {
+    font-family: 'Orbitron', sans-serif;
+    color: #00d4ff; 
+    letter-spacing: 1px;
+    text-shadow: 0 0 5px rgba(0, 212, 255, 0.7);
+}
+
+#post-content img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+
+/* ============================================= */
+/* ✨ 2. 익스플로러 패널 및 토글 버튼 스타일 ✨ */
+/* ============================================= */
 
 #explorer-panel {
     position: fixed;
@@ -17,11 +70,8 @@ html, body {
     z-index: 30;
     box-sizing: border-box;
     border-right: 1px solid rgba(0, 212, 255, 0.3);
-    pointer-events: all;
     color: #e0e0e0;
     transition: transform 0.4s ease-in-out;
-    display: flex;
-    flex-direction: column;
     padding: 0;
     overflow: hidden; 
 }
@@ -30,42 +80,6 @@ html, body {
     transform: translateX(-100%);
 }
 
-/* ✨ [새로운 스타일] 스크롤이 필요한 내부 컨텐츠 영역 
-.explorer-content {
-    flex-grow: 1;
-    overflow-y: auto; 
-    padding: 25px; 
-}*/
-.explorer-content {
-    /* flex-grow: 1; */ /* ✨ JS가 높이를 제어하므로 이 속성은 더 이상 필요 없습니다. */
-    overflow-y: auto;
-    padding: 25px;
-    
-    /* ✨ [추가] JS가 max-height를 설정할 때 기준이 될 수 있도록 추가 */
-    flex-shrink: 1;
-    height: auto;
-}
-/* Webkit 기반 브라우저(크롬, 사파리, 엣지 등)용 스크롤바 스타일 */
-.explorer-content::-webkit-scrollbar {
-    width: 8px; /* 스크롤바 너비 */
-}
-
-.explorer-content::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.2); /* 스크롤바 배경 */
-}
-
-.explorer-content::-webkit-scrollbar-thumb {
-    background-color: #00d4ff; /* 스크롤바 막대 색상 */
-    border-radius: 10px; /* 둥근 모서리 */
-    border: 2px solid transparent;
-    background-clip: content-box;
-}
-
-.explorer-content::-webkit-scrollbar-thumb:hover {
-    background-color: #4ef8ff; /* 마우스 호버 시 색상 */
-}
-
-/* ✨ 토글 버튼 스타일 (수정 최종본) */
 #explorer-toggle {
     position: fixed;
     top: 20px;
@@ -83,44 +97,75 @@ html, body {
     text-align: center;
     border-radius: 0 5px 5px 0;
     backdrop-filter: blur(5px);
-    /* 🚨 z-index를 패널(30)보다 높은 값으로 수정 */
     z-index: 31; 
     transition: left 0.4s ease-in-out;
-}
-
-#explorer-panel.collapsed {
-    transform: translateX(-100%);
 }
 
 #explorer-toggle.collapsed {
     left: 0;
 }
 
-/* 새로 추가된 span 태그에 대한 스타일 */
 #explorer-toggle span {
-    display: inline-block; /* transform을 적용하기 위해 필요 */
-    transition: transform 0.1s ease-in-out; /* 애니메이션을 span으로 이동 */
+    display: inline-block;
+    transition: transform 0.1s ease-in-out;
 }
 
-/* 접혔을 때 span(문자)만 뒤집도록 변경 */
 #explorer-toggle.collapsed span {
     transform: scaleX(-1);
 }
 
-/* ✨ 트리 구조 스타일 */
-#planet-list ul {
-    list-style: none;
-    padding-left: 20px; /* 하위 메뉴 들여쓰기 */
-    margin-top: 10px;
+
+/* ============================================= */
+/* ✨ 3. 익스플로러 내부 구조 및 스크롤 ✨ */
+/* ============================================= */
+
+.explorer-content {
+    padding: 10px 25px; 
+    box-sizing: border-box;
+    height: 100%;
+    position: relative;
 }
 
-#planet-list .category {
-    font-weight: bold;
-    color: #88ddff;
-    display: block;
-    margin-top: 20px;
-    font-size: 1.2em;
+/* Path Finder 제목 스타일 */
+.explorer-content h2 {
+    font-family: 'Orbitron', sans-serif;
+    color: #a0e9ff;
+    margin-top: 0;
+    
+    /* ✅ 아래 두 줄 추가 */
+    margin-bottom: 15px; /* 제목과 스크롤 영역 사이의 간격 */
+    height: 35px; /* 실제 h2의 높이 (개발자 도구로 확인 후 조절) */
 }
+/* ✅ 기존 .scroll-area 규칙을 아래 내용으로 전체 교체 */
+.scroll-area {
+
+    /* ✅ [핵심] 전체 화면 높이(100vh)에서 상단 제목과 여백 등의 공간을 뺀 만큼의 높이를 강제로 지정합니다. */
+    height: calc(100vh - 100px); /* 👈 이 120px 값을 조절해서 높이를 맞추세요. */
+    
+    overflow-y: auto; /* 스크롤 기능은 그대로 유지합니다. */
+}
+
+.scroll-area::-webkit-scrollbar {
+    width: 8px;
+}
+.scroll-area::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.scroll-area::-webkit-scrollbar-thumb {
+    background-color: #00d4ff;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+.scroll-area::-webkit-scrollbar-thumb:hover {
+    background-color: #4ef8ff;
+}
+
+
+/* ============================================= */
+/* ✨ 4. 트리 메뉴 스타일 및 애니메이션 ✨ */
+/* ============================================= */
 
 #planet-list {
     list-style: none;
@@ -128,110 +173,99 @@ html, body {
     margin: 0;
 }
 
-#planet-list li a {
-    color: #e0e0e0;
-    text-decoration: none;
-    font-size: 1.1em;
-    display: block;
-    padding: 10px 15px;
-    border-radius: 5px;
-    transition: all 0.2s ease;
-    border: 1px solid transparent;
-}
-
-#planet-list li a:hover {
-    background: rgba(0, 212, 255, 0.2);
-    color: #fff;
-    border-color: rgba(0, 212, 255, 0.5);
-}
-
-#planet-list li a.active {
-    background: #00d4ff;
-    color: #000;
-    font-weight: bold;
-    box-shadow: 0 0 15px #00d4ff;
-    border-color: #00d4ff;
-}
-
-/* ============================================= */
-/* ✨ 개선된 트리 스타일 및 애니메이션 ✨ */
-/* ============================================= */
-
-/* 1. 카테고리(중분류) 제목 스타일 */
+/* 카테고리(중분류) 제목 스타일 */
 .tree li > span {
     display: flex;
     align-items: center;
-    padding: 12px 10px; /* 충분한 여백 확보 */
-    margin: 4px 0; /* 카테고리 간 간격 */
-    font-weight: 600; /* 살짝 굵게 */
-    color: #a0e9ff; /* 부드러운 하늘색 */
-    border-radius: 6px; /* 부드러운 모서리 */
+    padding: 12px 10px;
+    margin: 4px 0;
+    font-weight: 600;
+    color: #a0e9ff;
+    border-radius: 6px;
     cursor: pointer;
     user-select: none;
-    transition: background-color 0.2s ease, color 0.2s ease; /* 부드러운 전환 효과 */
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-/* 카테고리 제목에 마우스를 올렸을 때 효과 */
 .tree li > span:hover {
-    background-color: rgba(0, 212, 255, 0.15); /* 은은한 배경색 */
-    color: #ffffff; /* 더 밝은 텍스트 색상 */
+    background-color: rgba(0, 212, 255, 0.15);
+    color: #ffffff;
+}
+
+/*
+✅ [수정] 최상위 레벨의 링크(카테고리가 아닌 항목) 스타일 추가
+*/
+.tree > li > a {
+    display: flex;
+    align-items: center;
+    padding: 12px 10px;
+    margin: 4px 0;
+    font-weight: 600;
+    color: #a0e9ff;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.tree > li > a:hover {
+    background-color: rgba(0, 212, 255, 0.15);
+    color: #ffffff;
 }
 
 
-/* 2. 카테고리 아이콘(화살표) 스타일 */
+/* 카테고리 아이콘(화살표) 스타일 */
 .tree li > span::before {
     content: '▼';
     margin-right: 12px;
     font-size: 0.8em;
-    transition: transform 0.3s ease-in-out; /* 아이콘 회전 애니메이션 */
+    transition: transform 0.3s ease-in-out;
 }
 
-/* 닫힌 상태(.collapsed)일 때 아이콘 회전 */
 .tree li.collapsed > span::before {
     transform: rotate(-90deg);
 }
 
-
-/* 3. 하위 메뉴(ul) 스타일 및 애니메이션 */
+/* 하위 메뉴(ul) 스타일 및 애니메이션 */
 .tree li > ul {
     list-style: none;
-    padding-left: 24px; /* 들여쓰기 증가 */
+    padding-left: 24px;
     margin: 0;
-    overflow: hidden; /* [핵심] 이 속성이 없으면 애니메이션이 어색해집니다 */
-
-    /* [애니메이션] 열릴 때의 최종 상태 */
-    max-height: 500px; /* 메뉴가 열렸을 때의 최대 높이 (내용물보다 충분히 크게) */
+    overflow: hidden;
+    max-height: 700px;
     opacity: 1;
     transition: 
-        max-height 0.4s cubic-bezier(0.25, 1, 0.5, 1), /* 펼쳐지는 애니메이션 */
-        opacity 0.3s ease-in-out; /* 나타나는 애니메이션 */
+        max-height 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+        opacity 0.3s ease-in-out;
 }
 
-/* [애니메이션] 닫혔을 때의 상태 */
 .tree li.collapsed > ul {
-    max-height: 0; /* 높이를 0으로 만들어 슬라이드 업 효과 */
+    max-height: 0;
     opacity: 0;
     margin-top: 0;
 }
 
-
-/* 4. 하위 메뉴의 각 링크(a) 아이템 스타일 */
+/* 하위 메뉴의 각 링크(a) 아이템 스타일 */
 .tree li ul a {
-    padding: 10px 15px;
-    padding-left: 10px;
-    font-size: 1em; /* 카테고리보다 작은 폰트 */
+    display: block;
+    padding: 10px 15px 10px 10px;
+    font-size: 1em;
     color: #d0d0d0;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: all 0.2s ease;
 }
 
 .tree li ul a:hover {
     color: #ffffff;
-    background: rgba(0, 212, 255, 0.1); /* 카테고리 호버보다 약하게 */
+    background: rgba(0, 212, 255, 0.1);
 }
 
-/* 현재 활성화된 페이지 링크 스타일 */
+/*
+✅ [수정] 모든 활성화된 링크(a.active)에 대한 스타일을 통합합니다.
+*/
 .tree li a.active {
-    color: #000;
     background: #00d4ff;
+    color: #000;
     font-weight: bold;
     box-shadow: 0 0 15px #00d4ff;
 }
