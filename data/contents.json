@@ -72,36 +72,8 @@
                 "href": "/page/blog.html?post=/blog/algorithm/02.sorting/02_05.quick"
               },
               {
-                "title": "힙 정렬",
-                "href": "/page/blog.html?post=/blog/algorithm/02.sorting/02_04.heap"
-              },
-              {
-                "title": "퀵 정렬",
-                "href": "/page/blog.html?post=/blog/algorithm/02.sorting/02_05.quick"
-              },
-              {
-                "title": "힙 정렬",
-                "href": "/page/blog.html?post=/blog/algorithm/02.sorting/02_04.heap"
-              },
-              {
-                "title": "퀵 정렬",
-                "href": "/page/blog.html?post=/blog/algorithm/02.sorting/02_05.quick"
-              },
-              {
-                "title": "힙 정렬",
-                "href": "/page/blog.html?post=/blog/algorithm/02.sorting/02_04.heap"
-              },
-              {
-                "title": "퀵 정렬",
-                "href": "/page/blog.html?post=/blog/algorithm/02.sorting/02_05.quick"
-              },
-              {
-                "title": "힙 정렬",
-                "href": "/page/blog.html?post=/blog/algorithm/02.sorting/02_04.heap"
-              },
-              {
-                "title": "퀵 정렬",
-                "href": "/page/blog.html?post=/blog/algorithm/02.sorting/02_05.quick"
+                "title": "계수 정렬",
+                "href": "/page/blog.html?post=/blog/algorithm/02.sorting/02_06.counting"
               }
             ]
           }
