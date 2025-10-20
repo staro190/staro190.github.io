@@ -20,9 +20,28 @@ async function loadExplorer() {
         console.error('Explorer를 불러오는 데 실패했습니다:', error);
     }
 }
+function adjustExplorerHeight() {
+    const panel = document.getElementById('explorer-panel');
+    const content = document.querySelector('.explorer-content');
+    const header = document.querySelector('.explorer-content h2'); // 익스플로러 내부 헤더
 
+    if (!panel || !content) return;
+
+    // 1. 패널의 전체 높이를 가져옵니다. (화면 전체 높이와 같아야 함)
+    const panelHeight = panel.clientHeight;
+
+    // 2. 헤더의 높이와 컨텐츠의 상/하 패딩 값을 계산합니다.
+    const headerHeight = header ? header.offsetHeight : 0;
+    const contentPadding = 25 * 2; // padding: 25px 이므로 상단 25 + 하단 25
+
+    // 3. 스크롤이 필요한 실제 목록(ul)이 차지할 수 있는 최대 높이를 계산합니다.
+    const scrollableHeight = panelHeight - headerHeight - contentPadding;
+    
+    // 4. 목록(ul)의 부모인 .explorer-content에 직접 max-height를 설정합니다.
+    content.style.maxHeight = `${scrollableHeight}px`;
+}
 // ... (setupExplorerToggle, highlightCurrentPageLink 등 나머지 함수는 동일) ...
-
+/*
 export async function initializeExplorer(options = {}) {
     await loadExplorer();
     setupExplorerToggle();
@@ -38,7 +57,23 @@ export async function initializeExplorer(options = {}) {
     // 3. ✨ 마지막으로, 활성화된 링크가 있는 경로를 펼칩니다. (새로 추가된 호출)
     expandPathToActiveLink();
 }
+*/
+// 기존 initializeExplorer 함수를 아래와 같이 수정합니다.
+export async function initializeExplorer(options = {}) {
+    await loadExplorer();
+    setupExplorerToggle();
+    highlightCurrentPageLink();
+    
+    if (options.onLinkClick) {
+        setupExplorerLinkEvents(options.onLinkClick);
+    }
+    
+    expandPathToActiveLink();
 
+    // ✨ [추가] 초기 높이를 설정하고, 창 크기가 변할 때마다 높이를 다시 조절합니다.
+    adjustExplorerHeight();
+    window.addEventListener('resize', adjustExplorerHeight);
+}
 function setupExplorerLinkEvents(linkClickHandler) {
     const links = document.querySelectorAll('#planet-list a');
     links.forEach((link, index) => {

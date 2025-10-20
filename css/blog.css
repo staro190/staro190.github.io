@@ -1,6 +1,12 @@
 /* Google Fonts에서 폰트 가져오기 */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=Orbitron:wght@700&display=swap');
 
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 /* 배경 canvas 스타일 */
 #bg {
     position: fixed;

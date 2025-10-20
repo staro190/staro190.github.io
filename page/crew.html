@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 우리의 크루를 소개합니다!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* 기본 스타일 및 폰트 설정 */
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d); /* 우주 느낌 그라데이션 */
+            color: #ecf0f1; /* 밝은 회색 텍스트 */
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            overflow-x: hidden; /* 가로 스크롤 방지 */
+        }
+
+        /* 배경에 별 효과 (가상의 요소 사용) */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgNzAwIDcwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8ZmlsdGVyIGlkPSJhIj4KICAgIDxmZUZ1c2lhblNwaGVyZSBpbj0iU291cmNlR3JhcGhpYyIgcmFkaXVzPSIxIj4KICAgICAgPGFubmlwYXRlIGF0dHJpYnV0ZU5hbWU9ImJhc2VGcmVxdWVuY3ciIGR1cj0iMjBzIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgdmFsdWVzPSIwLjAgMTUwOzAuMDMgNTswLjAgMTUwIj4KICAgICAgPC9hbmltYXRlPgogICAgPC9mZUZ1c2lhblNwaGVyZSBpbj4KICA8L2ZpbHRlcj4KICA8cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjRkZGRkZGIiBmaWx0ZXI9InVybCgjYSkiaW5zZXJ0PSIxIi8+Cjwvc3ZnPg==') repeat; /* 작은 점들을 이용한 별 효과 */
+            opacity: 0.1;
+            animation: twinkle 60s linear infinite; /* 별들이 깜빡이는 느낌 */
+            z-index: -1;
+        }
+
+        @keyframes twinkle {
+            0% { background-position: 0 0; }
+            100% { background-position: 1000px 1000px; }
+        }
+
+        /* 헤더 스타일 */
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(0, 0, 0, 0.4); /* 반투명 배경 */
+            width: 100%;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+            margin-bottom: 40px;
+            box-sizing: border-box;
+        }
+
+        header h1 {
+            font-family: 'Orbitron', sans-serif; /* 미래지향적 폰트 */
+            font-size: 3.5em;
+            color: #00e676; /* 에메랄드 그린 강조 */
+            text-shadow: 0 0 15px rgba(0, 230, 118, 0.7);
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            color: #b3e5fc; /* 하늘색 보조 텍스트 */
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* 크루 컨테이너 */
+        #crew-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* 반응형 그리드 */
+            gap: 40px; /* 크루원 카드 간격 */
+            padding: 20px;
+            max-width: 1200px;
+            width: 100%;
+            margin-bottom: 50px;
+        }
+
+        /* 크루원 카드 */
+        .crew-member-card {
+            background: rgba(255, 255, 255, 0.08); /* 반투명 카드 배경 */
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px); /* 블러 효과 */
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .crew-member-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 230, 118, 0.3), 0 0 30px rgba(0, 230, 118, 0.4); /* 호버 시 강조된 그림자 */
+        }
+
+        .crew-member-card::before { /* 카드 상단에 빛나는 선 */
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, transparent, #00e676, transparent);
+            animation: card-glow 3s infinite linear;
+        }
+
+        @keyframes card-glow {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+
+        .crew-member-card img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%; /* 원형 프로필 이미지 */
+            object-fit: cover;
+            border: 4px solid #00e676; /* 강조 색 테두리 */
+            margin-bottom: 20px;
+            box-shadow: 0 0 15px rgba(0, 230, 118, 0.6);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .crew-member-card:hover img {
+            border-color: #fdbb2d; /* 호버 시 테두리 색상 변경 */
+            box-shadow: 0 0 25px rgba(253, 187, 45, 0.8);
+        }
+
+        .crew-member-card h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8em;
+            color: #00e676;
+            margin-bottom: 10px;
+            text-shadow: 0 0 8px rgba(0, 230, 118, 0.5);
+        }
+
+        .crew-member-card p {
+            font-size: 1.1em;
+            color: #b3e5fc;
+            margin-bottom: 8px;
+        }
+
+        .crew-member-card .role {
+            font-weight: 700;
+            color: #fdbb2d; /* 주황색으로 역할 강조 */
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .crew-member-card .description {
+            font-size: 0.95em;
+            color: #cfd8dc;
+            margin-top: 15px;
+        }
+
+        /* 푸터 스타일 */
+        footer {
+            margin-top: auto; /* 하단에 고정 */
+            padding: 20px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            background: rgba(0, 0, 0, 0.3);
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 0.9em;
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2.5em;
+            }
+            header p {
+                font-size: 1em;
+            }
+            #crew-container {
+                grid-template-columns: 1fr; /* 모바일에서는 한 줄에 하나씩 */
+                padding: 15px;
+            }
+            .crew-member-card {
+                padding: 25px;
+            }
+            .crew-member-card img {
+                width: 120px;
+                height: 120px;
+            }
+            .crew-member-card h2 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🚀 우리의 크루를 소개합니다!</h1>
+        <p>우리 팀을 빛내는 특별한 재능을 가진 멤버들을 만나보세요. 각자의 자리에서 최고의 시너지를 만들어냅니다!</p>
+    </header>
+
+    <main id="crew-container">
+        </main>
+
+    <footer>
+        <p>&copy; 2023 Our Awesome Crew. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // 크루원 데이터 (실제 이미지 경로와 정보로 채워주세요!)
+        const crewMembers = [
+            {
+                name: "김민준",
+                role: "캡틴 & 프론트엔드 개발자",
+                image: "https://via.placeholder.com/150/00e676/FFFFFF?text=MJ", // 예시 이미지, 실제 이미지 URL로 변경
+                description: "사용자 경험을 최우선으로 생각하며, 직관적이고 아름다운 UI/UX를 구현합니다. 팀의 리더로서 전체적인 방향을 제시하고, 멤버들의 성장을 돕습니다."
+            },
+            {
+                name: "박서준",
+                role: "백엔드 개발자 & 데이터 전문가",
+                image: "https://via.placeholder.com/150/fdbb2d/FFFFFF?text=SJ", // 예시 이미지, 실제 이미지 URL로 변경
+                description: "안정적이고 효율적인 서버 아키텍처를 설계하고 구축합니다. 복잡한 데이터를 다루는 데 능숙하며, 보안과 성능 최적화에 기여합니다."
+            },
+            {
+                name: "이지혜",
+                role: "UI/UX 디자이너 & 크리에이티브 디렉터",
+                image: "https://via.placeholder.com/150/b3e5fc/FFFFFF?text=JH", // 예시 이미지, 실제 이미지 URL로 변경
+                description: "창의적인 아이디어로 사용자에게 즐거운 시각적 경험을 선사합니다. 디자인 시스템을 구축하고, 브랜드 아이덴티티를 강화하는 데 핵심적인 역할을 합니다."
+            },
+            {
+                name: "최현우",
+                role: "데브옵스 엔지니어 & 시스템 아키텍트",
+                image: "https://via.placeholder.com/150/e57373/FFFFFF?text=HW", // 예시 이미지, 실제 이미지 URL로 변경
+                description: "개발부터 배포, 운영까지 전체 파이프라인을 자동화하고 관리합니다. 시스템의 안정성과 확장성을 확보하여 개발 생산성을 극대화합니다."
+            },
+            {
+                name: "윤아영",
+                role: "QA 엔지니어 & 제품 분석가",
+                image: "https://via.placeholder.com/150/8bc34a/FFFFFF?text=AY", // 예시 이미지, 실제 이미지 URL로 변경
+                description: "제품의 품질을 검증하고 사용자 피드백을 분석하여 개선점을 도출합니다. 버그를 찾아내고, 제품의 완성도를 높이는 데 기여합니다."
+            }
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const crewContainer = document.getElementById('crew-container');
+
+            crewMembers.forEach(member => {
+                const card = document.createElement('div');
+                card.classList.add('crew-member-card');
+
+                card.innerHTML = `
+                    <img src="${member.image}" alt="${member.name} 프로필">
+                    <h2>${member.name}</h2>
+                    <span class="role">${member.role}</span>
+                    <p class="description">${member.description}</p>
+                `;
+                crewContainer.appendChild(card);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,11 +1,11 @@
 [
   {
     "title": "Star System",
-    "href": "../index.html"
+    "href": "/index.html"
   },
   {
     "title": "Ship Crew",
-    "href": "./page/about.html"
+    "href": "/page/crew.html"
   },
   {
     "title": "Projects",
@@ -66,6 +66,42 @@
               {
                 "title": "힙 정렬",
                 "href": "/page/blog.html?post=/blog/algorithm/02.sorting/02_04.heap"
+              },
+              {
+                "title": "퀵 정렬",
+                "href": "/page/blog.html?post=/blog/algorithm/02.sorting/02_05.quick"
+              },
+              {
+                "title": "힙 정렬",
+                "href": "/page/blog.html?post=/blog/algorithm/02.sorting/02_04.heap"
+              },
+              {
+                "title": "퀵 정렬",
+                "href": "/page/blog.html?post=/blog/algorithm/02.sorting/02_05.quick"
+              },
+              {
+                "title": "힙 정렬",
+                "href": "/page/blog.html?post=/blog/algorithm/02.sorting/02_04.heap"
+              },
+              {
+                "title": "퀵 정렬",
+                "href": "/page/blog.html?post=/blog/algorithm/02.sorting/02_05.quick"
+              },
+              {
+                "title": "힙 정렬",
+                "href": "/page/blog.html?post=/blog/algorithm/02.sorting/02_04.heap"
+              },
+              {
+                "title": "퀵 정렬",
+                "href": "/page/blog.html?post=/blog/algorithm/02.sorting/02_05.quick"
+              },
+              {
+                "title": "힙 정렬",
+                "href": "/page/blog.html?post=/blog/algorithm/02.sorting/02_04.heap"
+              },
+              {
+                "title": "퀵 정렬",
+                "href": "/page/blog.html?post=/blog/algorithm/02.sorting/02_05.quick"
               }
             ]
           }
@@ -78,15 +114,7 @@
         "children": [
           {
             "title": "인트로",
-            "href": "/page/blog.html?markdown=/blog/algorithm/01.intro/intro.md"
-          },
-          {
-            "title": "삽입 정렬",
-            "href": "/page/blog.html?markdown=/blog/algorithm/02.insertion sort/insertionsort.md"
-          },
-          {
-            "title": "병합 정렬",
-            "href": "/page/blog.html?markdown=/blog/algorithm/03.merge sort/mergesort.md"
+            "href": "/page/blog.html?post=/blog/algorithm/01.intro"
           }
         ]
       }

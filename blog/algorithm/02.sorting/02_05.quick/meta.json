@@ -1,0 +1,5 @@
+{
+  "title": "퀵 정렬 (Quick Sort)",
+  "markdownFile": "quicksort.md",
+  "visualizationScript": "quicksort.js"
+}
