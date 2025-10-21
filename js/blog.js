@@ -1,6 +1,7 @@
 import { initializeBackground } from "/js/common.js";
 import { initializeExplorer } from "/js/explorer.js";
-import { setupPlanetSortVisualization} from "/js/sort_visual.js";
+import { setupPlanetSortVisualization} from "/js/vis_solarsort.js";
+import { initialize as initializeSlideshow } from '/js/vis_slideshow.js';
 
 async function loadMarkdownPost(markdownPath) {
     if (!markdownPath) {
@@ -106,6 +107,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (algorithmGenerator) {
                 setupPlanetSortVisualization(algorithmGenerator);
             }
+        }
+
+        if (meta.slideshow) {
+            // 1. 이미지들이 있는 폴더의 전체 경로를 만듭니다.
+            const imageFolderPath = `${postFolder}/${meta.slideshow}`;
+            
+            // 2. import한 초기화 함수에 경로를 전달하여 실행합니다.
+            initializeSlideshow(imageFolderPath);
         }
 
     } catch (error) {

@@ -80,6 +80,32 @@
                 "href": "/page/blog.html?post=/blog/algorithm/02.sorting/02_07.radix"
               }
             ]
+          },
+          {
+            "title": "동적 계획법(DP)",
+            "isCategory": true,
+            "children": [
+              {
+                "title": "인트로",
+                "href": "/page/blog.html?post=/blog/algorithm/03.dp/03_01.intro"
+              },
+              {
+                "title": "공정 스케줄링",
+                "href": "/page/blog.html?post=/blog/algorithm/03.dp/03_02.assembly"
+              },
+              {
+                "title": "막대 자르기",
+                "href": "/page/blog.html?post=/blog/algorithm/03.dp/03_03.rod"
+              },
+              {
+                "title": "행렬 곱셈",
+                "href": "/page/blog.html?post=/blog/algorithm/03.dp/03_04.matrix"
+              },
+              {
+                "title": "공통 시퀀스",
+                "href": "/page/blog.html?post=/blog/algorithm/03.dp/03_05.lcs"
+              }
+            ]
           }
         ]
       },

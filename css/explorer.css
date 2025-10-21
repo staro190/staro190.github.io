@@ -140,8 +140,7 @@ main#post-content h1, main#post-content h2 {
 .scroll-area {
 
     /* ✅ [핵심] 전체 화면 높이(100vh)에서 상단 제목과 여백 등의 공간을 뺀 만큼의 높이를 강제로 지정합니다. */
-    height: calc(100vh - 100px); /* 👈 이 120px 값을 조절해서 높이를 맞추세요. */
-    
+    height: calc(100vh - 150px); /*👈 이 120px 값을 조절해서 높이를 맞추세요. */
     overflow-y: auto; /* 스크롤 기능은 그대로 유지합니다. */
 }
 
@@ -231,7 +230,7 @@ main#post-content h1, main#post-content h2 {
     padding-left: 24px;
     margin: 0;
     overflow: hidden;
-    max-height: 700px;
+    max-height: auto;
     opacity: 1;
     transition: 
         max-height 0.4s cubic-bezier(0.25, 1, 0.5, 1),
