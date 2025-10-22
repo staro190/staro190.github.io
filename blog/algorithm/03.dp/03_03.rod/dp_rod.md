@@ -72,7 +72,7 @@ x1, x2 = 18, 7
 
 ## 알고리즘 동작
 
-![시각화 준비중](ready_to_visual.png)
+<div class="slideshow-container" data-duration="3000"></div>
 
 ## 점화식
 
