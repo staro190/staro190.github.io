@@ -36,11 +36,11 @@
     ]
   },
   {
-    "title": "Blog",
+    "title": "Notes",
     "isCategory": true,
     "children": [
       {
-        "title": "알고리즘",
+        "title": "Algorithm",
         "isCategory": true,
         "children": [
           {
