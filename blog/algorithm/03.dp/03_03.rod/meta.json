@@ -1,5 +1,5 @@
 {
   "title": "막대 자르기",
   "markdownFile": "dp_rod.md",
-  "slideshow": "film1"
+  "canvasVis": "vis_rod.js"
 }

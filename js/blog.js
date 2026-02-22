@@ -112,9 +112,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (meta.slideshow) {
             // 1. 이미지들이 있는 폴더의 전체 경로를 만듭니다.
             const imageFolderPath = `${postFolder}/${meta.slideshow}`;
-            
+
             // 2. import한 초기화 함수에 경로를 전달하여 실행합니다.
             initializeSlideshow(imageFolderPath);
+        }
+
+        if (meta.canvasVis) {
+            const modulePath = `${postFolder}/${meta.canvasVis}`;
+            const { initialize } = await import(modulePath);
+            if (initialize) initialize();
         }
 
     } catch (error) {

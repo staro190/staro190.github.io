@@ -7,8 +7,15 @@ document.addEventListener('DOMContentLoaded', () => {
     let planets = [];
     let selectedIndex = 0;
 
-    // 1. 익스플로러 초기화
-    initializeExplorer();
+    // 1. 익스플로러 초기화 후, 패널 영역의 wheel 이벤트가 행성 선택 리스너로
+    //    전파되지 않도록 stopPropagation을 등록한다.
+    initializeExplorer().then(() => {
+        const stopProp = (e) => e.stopPropagation();
+        document.getElementById('explorer-panel')
+            ?.addEventListener('wheel', stopProp, { passive: true });
+        document.getElementById('explorer-toggle')
+            ?.addEventListener('wheel', stopProp, { passive: true });
+    });
 
     // 2. voyage.html 고유의 행성 선택 인터랙션 기능 실행
     if (document.getElementById('planet-image')) {

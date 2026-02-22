@@ -1,4 +1,5 @@
 {
-  "title": "동적 계획법 인트로",
-  "markdownFile": "dp_intro.md"
+  "title": "최장 공통 부분 수열",
+  "markdownFile": "lcs.md",
+  "canvasVis": "vis_lcs.js"
 }

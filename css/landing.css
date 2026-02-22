@@ -27,11 +27,21 @@ body {
     font-size: 1.2em; 
 }
 
-canvas { 
-    display: block; 
+canvas {
+    display: block;
+}
+
+#bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
 }
 
 /* 궤도 캔버스는 JS에서 위치를 제어하므로 기본 스타일만 유지 */
 #orbitCanvas {
     position: fixed;
+    z-index: 5;
 }
